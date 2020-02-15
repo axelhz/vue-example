@@ -1,0 +1,40 @@
+@import './fonts.scss';
+@import './dom.scss';
+
+@mixin select-off() {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-grag: none;
+	-webkit-user-grag: none;
+}
+
+@mixin btn($bg-color, $text-color) {
+	@include select-off;
+	height: 24px;
+	width: 180px;
+	font-size: 0.9rem;
+	border-radius: 4px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	cursor: pointer;
+	background: $bg-color;
+	color: $text-color;
+}
+
+.button-common {
+	@include btn(#f60, white);
+}
+
+.wrapper-common {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.header-common {
+	text-decoration: undeline;
+}
