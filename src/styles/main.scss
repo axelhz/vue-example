@@ -1,5 +1,6 @@
 @import './fonts.scss';
 @import './dom.scss';
+@import '../../node_modules/swiper/css/swiper.css';
 
 @mixin select-off() {
 	-webkit-user-select: none;
@@ -29,6 +30,8 @@
 }
 
 .wrapper-common {
+	max-width: 1920px;
+	width: 100%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
