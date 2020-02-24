@@ -1,9 +1,9 @@
 <template>
     <div class="block-header-container">
-        <div class="logo-container">
+        <router-link :to="{name: 'home'}" class="logo-container">
             <div class="logo">Фильмы</div>
             <div class="logo-text">Лучшие</div>
-        </div>
+        </router-link>
         <div class="container" v-if="!!USERNAME">
              <div class="profile-img"></div>
              <div class="profile-username">{{ USERNAME }}</div>

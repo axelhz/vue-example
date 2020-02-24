@@ -23,3 +23,12 @@ html {
 	min-height: 100vh;
 	padding-bottom: 50px;
 }
+
+a:-webkit-any-link {
+	text-decoration: none;
+	cursor: pointer;
+
+	&:not(.button-common) {
+		color: #f60;
+	}
+}
