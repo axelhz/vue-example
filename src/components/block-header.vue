@@ -4,7 +4,7 @@
             <div class="logo">Фильмы</div>
             <div class="logo-text">Лучшие</div>
         </router-link>
-        <div class="container" v-if="!!USERNAME">
+        <div class="container" v-if="ISAUTHETICATED">
              <div class="profile-img"></div>
              <div class="profile-username">{{ USERNAME }}</div>
              <div class="profile-label">Корзина</div>
@@ -33,7 +33,9 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['USERNAME'])
+        ...mapGetters(['USERNAME']),
+		...mapGetters(['ISAUTHETICATED']),
+		...mapGetters(['ISADMIN'])
     },
     methods: { 
         exitUser() {

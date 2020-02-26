@@ -3,11 +3,19 @@ import user_functions from '../server/user_functions';
 
 export default {
 	state: {
-		username: null
+		username: null,
+		isAutheticated: false,
+		isAdmin: false
 	},
 	getters: {
 		USERNAME: state => {
 			return state.username;
+		},
+		ISAUTHETICATED: (state, getters) => {
+			return !!getters.USERNAME;
+		},
+		ISADMIN: (state, getters) => {
+			return getters.USERNAME === 'admin';
 		}
 	},
 	mutations: {
@@ -16,6 +24,7 @@ export default {
 		}
 	},
 	actions: {
+		
 		GET_USERNAME: async state => {
 			if (Vue.$cookies.get('vue_example_username')) {
 				state.commit('SET_USERNAME', Vue.$cookies.get('vue_example_username'));

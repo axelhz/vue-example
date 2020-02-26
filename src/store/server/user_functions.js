@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 export default {
 	autheticateUser: ({login, password}) => {
 		return new Promise(resolve => {
