@@ -38,6 +38,16 @@
 	align-items: center;
 }
 
+.post-wrapper {
+	width: 100%;
+	max-width: 1400px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: black;
+	padding-top: 60px;
+}
+
 .header-common {
 	text-decoration: undeline;
 }

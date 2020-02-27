@@ -1,36 +1,38 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import user from './modules/user';
+import posts from './modules/posts';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 	modules: {
-		user
+		user,
+		posts
 	},
 	state: {
-		enabled_cookie: true,
+		enabled_cookies: true,
 		message_text: ''
 	},
 	getters: {
-		ENABLED_COOKIE: state => {
-			return state.enabled_cookie;
+		ENABLED_COOKIES: state => {
+			return state.enabled_cookies;
 		},
 		MESSAGE_TEXT: state => {
 			return state.message_text;
 		}
 	},
 	mutations: {
-		SET_COOKIE: (state, enabled_cookie) => {
-			state.enabled_cookie = enabled_cookie;
+		SET_ENABLED_COOKIES: (state, enabled_cookies) => {
+			state.enabled_cookies = enabled_cookies;
 		},
 		SET_MESSAGE_TEXT: (state, message_text) => {
 			state.message_text = message_text;
 		}
 	},
 	actions: {
-		CHANGE_COOKIE: async (state, enabled_cookie) => {
-			state.commit('SET_COOKIE', enabled_cookie);
+		CHANGE_ENABLED_COOKIES: async (state, enabled_cookies) => {
+			state.commit('SET_COOKIES', enabled_cookies);
 		},
 		CHECK_MESSAGE_TEXT: async (state, {new_message_text, type}) => {
 			if (new_message_text) {

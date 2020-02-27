@@ -6,7 +6,7 @@ export default {
 			description: [
 				{
 					type: 'img',
-					value: 'news/1.jpg'
+					value: 'posts/1.jpg'
 				},
 				{
 					type: 'text',
@@ -24,7 +24,8 @@ export default {
 				}
 						
 			],
-			img: 'news/1.jpg'
+			img: 'posts/1.jpg',
+			stat: 'show'
 		},
 		{
 			id: 2,
@@ -32,7 +33,7 @@ export default {
 			description: [
 				{
 					type: 'img',
-					value: 'news/2.jpg'
+					value: 'posts/2.jpg'
 				},
 				{
 					type: 'text',
@@ -52,7 +53,8 @@ export default {
 					представляем однополую пару с ребенком».`
 				}
 			],
-			img: 'news/2.jpg'
+			img: 'posts/2.jpg',
+			stat: 'show'
 		},
 		{
 			id: 3,
@@ -60,7 +62,7 @@ export default {
 			description: [
 				{
 					type: 'img',
-					value: 'news/3.jpg'
+					value: 'posts/3.jpg'
 				},
 				{
 					type: 'text',
@@ -81,7 +83,8 @@ export default {
 				}
 					
 			],
-			img: 'news/3.jpg'
+			img: 'posts/3.jpg',
+			stat: 'confirm'
 		}
 	]
 }

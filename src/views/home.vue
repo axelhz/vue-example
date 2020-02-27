@@ -1,17 +1,17 @@
 <template>
 	<div class="wrapper-common">
-		<block-news></block-news>
+		<posts-show></posts-show> 
 	</div>
 </template>
 
 <script>
 	
-import BlockNews from '../components/block-news.vue';
+import PostsShow from '@/views/posts-show.vue';
 
 export default {
 	name: 'home',
 	mixins: [],
-	components: {BlockNews},
+	components: {PostsShow},
 	data() {
 		return {
 

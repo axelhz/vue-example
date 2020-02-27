@@ -9,8 +9,8 @@
 
 <script>
 
-import BlockHeader from './components/block-header.vue';
-import BlockFooter from './components/block-footer.vue';
+import BlockHeader from './components/header.vue';
+import BlockFooter from './components/footer.vue';
 import MessageBox from './components/message-box.vue';
 import {mapGetters} from 'vuex';
 
@@ -24,8 +24,17 @@ export default {
 			
 		}
 	},
-	mounted() {
-		this.$store.dispatch('GET_USERNAME');
+	mounted() {	
+		if (this.$cookies.get('vue_example_user')) {
+			this.$store.dispatch('GET_USER_THROUGH_HASH', this.$cookies.get('vue_example_user'))
+			.then(username => {
+				console.log(username);
+			})
+			.catch(({type, message}) => {
+				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+				console.error(message);
+			})
+		}
 	},
 	computed: {
 		...mapGetters(['MESSAGE_TEXT'])

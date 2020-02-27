@@ -4,9 +4,9 @@
 		<ul class="errors-common">
 			<li class="error-common" v-for="(error, i) in errors" :key="i">{{ error }}</li>
 		</ul>
-		<form @submit.prevent="submitForm(login, password)" class="form-common">
+		<form @submit.prevent="submitForm(username, password)" class="form-common">
 			<fieldset class="fieldset-common">
-				<input type="text" placeholder="Логин" v-model="login" class="input-common"/>
+				<input type="text" placeholder="Логин" v-model="username" class="input-common"/>
 			</fieldset>
 			<fieldset class="fieldset-common">
 				<input type="password" placeholder="Пароль" v-model="password" class="input-common"/>
@@ -22,6 +22,8 @@
 
 <script>
 
+import {mapGetters} from 'vuex';
+
 export default {
 	name: 'registration',
 	components: {},
@@ -30,16 +32,19 @@ export default {
 	data() {
 		return {
 			errors: [],
-			login: null,
+			username: null,
 			password: null,
 			repeat_password: null
 		}
+	},
+	computed: {
+		...mapGetters(['ENABLED_COOKIES'])
 	},
 	methods: {
 		validateData() {
 			let check = true;
 
-			if (!this.login) {
+			if (!this.username) {
 				this.errors.push('Логин не может быть пустым');
 				check = false;
 			}
@@ -54,12 +59,18 @@ export default {
 
 			return check;
 		},
-		submitForm(login, password) {
+		submitForm(username, password) {
 			this.errors = [];
 			if (this.validateData()) {
-				this.$store
-				.dispatch('SAVE_USERS', {login, password})
-				.then(() => this.$router.push({name: 'home'}))
+				this.$store.dispatch('REGISTRATE_USER', {username, password})
+				.then((session_hash) => {
+					if (this.ENABLED_COOKIES) this.$cookies.set('vue_example_user', session_hash);
+					this.$router.push({name: 'home'});
+				}) 
+				.catch(({type, message}) => {
+					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+					console.error(message);
+				})
 			}
 		}
 	}	

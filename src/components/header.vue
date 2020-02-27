@@ -33,16 +33,21 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['USERNAME']),
-		...mapGetters(['ISAUTHETICATED']),
-		...mapGetters(['ISADMIN'])
+        ...mapGetters(['USERNAME', 'ISAUTHETICATED', 'ISADMIN'])
     },
     methods: { 
         exitUser() {
-            this.$store.dispatch('EXIT_USER')
+			let session_hash = (this.$cookies.get('vue_example_user')) ? this.$cookies.get('vue_example_user') : '';
+            this.$store.dispatch('EXIT_USER', session_hash)
             .then(() => {
+				this.$store.commit('SET_ALL_POSTS', []);
+				this.$cookies.remove('vue_example_user');
                 if (this.$router.currentRoute.name !== 'home') this.$router.push({name: 'home'});
             })
+			.catch(({type, message}) => {
+				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+				console.error(message);
+			})
         }
     }
 }

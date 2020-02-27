@@ -1,16 +1,16 @@
 <template>
-	<div class="news-wrapper">
-		<div class="swiper-arrow swiper-arrow-left" v-if="c_news.length > 1"></div>
-		<div class="swiper-arrow swiper-arrow-right" v-if="c_news.length > 1"></div>
+	<div class="posts-wrapper">
+		<div class="swiper-arrow swiper-arrow-left" v-if="SHOWN_POSTS.length > 1"></div>
+		<div class="swiper-arrow swiper-arrow-right" v-if="SHOWN_POSTS.length > 1"></div>
 		<div class="swiper-container">
 			<div class="swiper-wrapper">
-				<div class="swiper-slide" v-for="(c_new, i) in c_news" :key="i">
-					<div class="new">
-						<div class="new-context">
-							<div class="new-title">{{ c_new.title }}</div>
-							<router-link :to="{name: 'new', params: { id: c_new.id }}" class="button-common">Подробнее</router-link>
+				<div class="swiper-slide" v-for="(post, i) in SHOWN_POSTS" :key="i">
+					<div class="post">
+						<div class="post-context">
+							<div class="post-title">{{ post.title }}</div>
+							<router-link :to="{name: 'post-show', params: { id: post.id }}" class="button-common">Подробнее</router-link>
 						</div>
-						<img class="new-image" :src="require('../images/' + c_new.img)">
+						<img class="post-image" :src="require('@/images/' + post.img)">
 					</div>
 				</div>
 			</div>
@@ -20,17 +20,19 @@
 
 <script>
 
-import c_news from '../data/news.js';
 import Swiper from 'swiper';
+import {mapGetters} from 'vuex';
 
 export default {
-	name: 'block-news',
+	name: 'posts-show',
 	mixins: [],
 	data() {
 		return {
-			c_news: c_news.data,
 			swiper: null
 		}
+	},
+	computed: {
+		...mapGetters(['SHOWN_POSTS'])
 	},
 	mounted() {
 		this.initSwiper();
@@ -38,9 +40,9 @@ export default {
 	methods: {
 		initSwiper() {
 			this.swiper = new Swiper('.swiper-container', {
-				loop: this.c_news.length > 1 ? true: false,
+				loop: this.SHOWN_POSTS.length > 1 ? true: false,
 				simulateTouch: false,
-				autoplay: this.c_news.length > 1 ? { delay: 5000 } : false,
+				autoplay: this.SHOWN_POSTS.length > 1 ? { delay: 5000 } : false,
 				navigation: {
 					nextEl: '.swiper-arrow-right',
 					prevEl: '.swiper-arrow-left',
@@ -54,23 +56,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.news-wrapper {
+	.posts-wrapper {
 		width: 100%;
 		position: relative;
 	}
-	.new {
+	.post {
 		width: 100%;
 		height: calc(100vw*600/1920);
 		max-height: 600px;
 		position: relative;
 		color: white;
 	}
-	.new-image {
+	.post-image {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 	}
-	.new-context {
+	.post-context {
 		position: absolute;
 		top: 0;
 		width: 100%;

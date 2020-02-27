@@ -1,7 +1,7 @@
 <template>
-	<div class="new-wrapper">
-		<div class="title">{{ c_new.title }}</div>
-		<div class="description-item" v-for="(description, i) in c_new.description" :key="i">
+	<div class="post-wrapper" v-if="post">
+		<div class="title">{{ post.title }}</div>
+		<div class="description-item" v-for="(description, i) in post.description" :key="i">
 			<img class="description-item-img" v-if="description.type === 'img'" :src="require('../images/' + description.value)">
 			<div class="description-item-text" v-else-if="description.type === 'text'" v-html="description.value"></div>
 		</div>
@@ -10,34 +10,41 @@
 
 <script>
 
-import c_news from '../data/news.js';
+import {mapGetters} from 'vuex';
 
 export default {
-	name: 'new',
+	name: 'post-show',
 	data() {
 		return {
-			c_new: null,
-			c_news: c_news.data
+			post: null
 		}
+	},
+	computed: {
+		...mapGetters(['SHOWN_POSTS', 'ISADMIN'])
 	},
 	watch: {
 		'$route.params.id'(id) {
-			this.getNew(+id);
+			this.checkPost(+id);
 		}
 	},
 	created() {
-		this.getNew(+this.$route.params.id);
-
+		this.checkPost(+this.$route.params.id);
 	},
 	methods: {
-		getNew(id) {
-			this.c_news.forEach(el => {
+		checkPost(id) {
+			if (isNaN(id)) {
+				this.$router.replace({name: 'post-show', params: {id: this.SHOWN_POSTS[0].id}});
+				return;
+			}
+			
+			this.post = null;
+			this.SHOWN_POSTS.forEach(el => {
 				if (el.id === id) {
-					this.c_new = el;
+					this.post = el;
 				}
-			})
-
-			if (!this.c_new) this.c_new = this.c_news[0]
+			});	
+				
+			if (!this.post) this.$router.replace({name: 'post-show', params: {id: this.SHOWN_POSTS[0].id}});
 		}
 	}
 	
@@ -46,15 +53,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.new-wrapper {
-		width: 100%;
-		max-width: 1400px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		color: black;
-		padding-top: 60px;
-	}
 	.title {
 		font-size: 1.6rem;
 		width: 100%;
