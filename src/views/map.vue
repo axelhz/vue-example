@@ -1,9 +1,10 @@
 <template>
     <div class="wrapper-common">
-		<div class="header-common">Местоположение</div>
-		<yandex-map :coords="coords">
-			<ymap-marker marker-id="123" :coords="coords" :balloon-template="balloonTemplate">
-			</ymap-marker>
+		<div class="header-common">Местоположение кинотеатров</div>
+		<yandex-map :zoom="10" :coords="[55.75370903771494, 37.61981338262558]">
+			<ymap-marker v-for="(cinema, i) in cinemas" :marker-id="i+1" 
+						:coords="cinema.coords" :balloon-template="balloonTemplate(cinema)"
+						:key="i"></ymap-marker>
 		
 		</yandex-map>
 	</div>
@@ -12,24 +13,25 @@
 <script>
 
 import { yandexMap, ymapMarker } from 'vue-yandex-maps';
+import cinemas from '@/data/cinemas.js';
 
 export default {
 	name: 'block-map',
 	components: {yandexMap, ymapMarker},
 	data() {
 		return {
-			coords: [54, 39]
+			coords: [54, 39],
+			cinemas: cinemas
 		}
 	},
 	mounted() {
 
 	},
-	computed: {
-		balloonTemplate() {
+	methods: {
+		balloonTemplate(cinema) {
 			return `
-				<h1 class="red">Hi, everyone!</h1>
-				<p>I am here: ${this.coords}</p>
-				<img src="http://via.placeholder.com/350x150">
+				<h1>` + cinema.name + `</h1>
+				<span>` + cinema.address + `</span>
 				`
 		}
 	}
