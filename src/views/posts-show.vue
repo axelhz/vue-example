@@ -10,7 +10,7 @@
 							<div class="post-title">{{ post.title }}</div>
 							<router-link :to="{name: 'post-show', params: { id: post.id }}" class="button-common">Подробнее</router-link>
 						</div>
-						<img class="post-image" :src="require('@/images/' + post.img)">
+						<img class="post-image" :src="require('@/images/posts/' + post.img)">
 					</div>
 				</div>
 			</div>

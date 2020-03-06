@@ -22,44 +22,94 @@ export default {
 		},
 	},
 	actions: {
-		GET_ALL_POSTS: state => {
+		GET_ALL_POSTS: (state, session_hash) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.getAllPosts(state.getters.USERNAME)
-				.then(all_posts => {
-					state.commit('SET_ALL_POSTS', JSON.parse(all_posts));
-					resolve();
+				posts_functions.getAllPosts(session_hash)
+				.then(response => JSON.parse(response))
+				.then(result => {
+					if (!result.success) {
+						reject({type: 'user', message: result.message});
+					} else {
+						state.commit('SET_ALL_POSTS', result.data.posts);
+						resolve();
+					}
 				})
-				.catch(error => {
-					state.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: error.message, type: 'error'});
-					reject();
+				.catch(({message}) => {
+					reject({type: 'system', message})
 				})
+				
 			})
 		},
 		GET_SHOWN_POSTS: state => {
 			return new Promise((resolve, reject) => {
 				posts_functions.getShownPosts()
-				.then(shown_posts => {
-					state.commit('SET_SHOWN_POSTS', JSON.parse(shown_posts));
-					resolve();
+				.then(response => JSON.parse(response))
+				.then(result => {
+					if (!result.success) reject({type: 'user', message: result.message});
+					else {
+						state.commit('SET_SHOWN_POSTS', result.data.posts);
+						resolve();
+					}	
 				})
-				.catch(error => {
-					state.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: error.message, type: 'error'});
-					reject();
+				.catch(({message}) => {
+					reject({type: 'error', message})
 				})
 			})
 		},
-		ADD_POST: (state, {title, description, img}) => {
+		CREATE_POST: (state, post) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.addPost({title, description, img})
-				.then(all_posts => {
-					state.commit('SET_ALL_POSTS', all_posts);
-					resolve();
+				posts_functions.createPost(post)
+				.then(response => JSON.parse(response))
+				.then(result => {
+					if (!result.success) reject({type: 'user', message: result.message});
+					else {
+						state.commit('SET_ALL_POSTS', result.data.posts);
+						resolve(result.data.new_id);
+					}
 				})
-				.catch(error => {
-					state.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: error.message, type: 'error'});
-					reject();
+				.catch(({message}) => {
+					reject({type: 'error', message})
 				})
 			})
-		}
+		},
+		CHANGE_POST: (state, post) => {
+			return new Promise((resolve, reject) => {
+				posts_functions.changePost(post)
+				.then(response => JSON.parse(response))
+				.then(result => {
+					if (!result.success) reject({type: 'user', message: result.message});
+					else {
+						state.commit('SET_ALL_POSTS', result.data.posts);
+						resolve();
+					}
+				})
+				.catch(({message}) => {
+					reject({type: 'error', message})
+				})
+			})
+		},
+		SAVE_POSTS: (state, posts) => {
+			return new Promise((resolve, reject) => {
+				posts_functions.savePosts(posts)
+				.then(response => JSON.parse(response))
+				.then(result => {
+					if (!result.success) reject({type: 'user', message: result.message});
+					else {
+						state.commit('SET_ALL_POSTS', result.data.posts);
+						posts_functions.getShownPosts()
+						state.dispatch('GET_SHOWN_POSTS')
+						.then(() => {
+							resolve();
+						})
+						.catch(({message}) => {
+							reject({type: 'error', message})
+						})
+					}
+				})
+				.catch(({message}) => {
+					reject({type: 'error', message})
+				})
+			})
+		},
 	}
 }

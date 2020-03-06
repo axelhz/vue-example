@@ -5,10 +5,12 @@
             <div class="logo-text">Лучшие</div>
         </router-link>
         <div class="container" v-if="ISAUTHETICATED">
-             <div class="profile-img"></div>
-             <div class="profile-username">{{ USERNAME }}</div>
-             <div class="profile-label">Корзина</div>
-             <div class="profile-label" @click="exitUser">Выйти</div>
+			<router-link v-if="ISADMIN" :to="{name: 'post-editor', params: {id: 0}}">+</router-link>
+			<router-link v-if="ISADMIN" :to="{name: 'posts-editor'}">Р</router-link>
+			<div class="profile-img"></div>
+			<div class="profile-username">{{ USERNAME }}</div>
+			<div class="profile-label">Корзина</div>
+			<div class="profile-label" @click="exitUser">Выйти</div>
         </div>
         <div class="container" v-else>
              <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>

@@ -27,14 +27,23 @@ export default {
 	mounted() {	
 		if (this.$cookies.get('vue_example_user')) {
 			this.$store.dispatch('GET_USER_THROUGH_HASH', this.$cookies.get('vue_example_user'))
-			.then(username => {
-				console.log(username);
+			.then(session_hash => {
+				this.$store.dispatch('GET_ALL_POSTS', session_hash)
+				.catch(({type, message}) => {
+					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+					console.error(message);
+				})
 			})
 			.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
 				console.error(message);
 			})
 		}
+		this.$store.dispatch('GET_SHOWN_POSTS')
+		.catch(({type, message}) => {
+			if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+			console.error(message);
+		})
 	},
 	computed: {
 		...mapGetters(['MESSAGE_TEXT'])

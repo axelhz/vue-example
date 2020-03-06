@@ -66,6 +66,11 @@ export default {
 				.then((session_hash) => {
 					if (this.ENABLED_COOKIES) this.$cookies.set('vue_example_user', session_hash);
 					this.$router.push({name: 'home'});
+					this.$store.dispatch('GET_ALL_POSTS', session_hash)
+					.catch(({type, message}) => {
+						if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+						console.error(message);
+					})
 				}) 
 				.catch(({type, message}) => {
 					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});

@@ -37,7 +37,7 @@ export default {
 					} else {
 						state.commit('SET_USERNAME', result.data.username);
 						state.commit('SET_ISADMIN', result.data.isAdmin);
-						resolve(result.data.username);
+						resolve(session_hash);
 					}
 				})
 				.catch(({message}) => {

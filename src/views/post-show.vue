@@ -2,7 +2,7 @@
 	<div class="post-wrapper" v-if="post">
 		<div class="title">{{ post.title }}</div>
 		<div class="description-item" v-for="(description, i) in post.description" :key="i">
-			<img class="description-item-img" v-if="description.type === 'img'" :src="require('../images/' + description.value)">
+			<img class="description-item-img" v-if="description.type === 'img' && description.value" :src="require('../images/posts/' + description.value)">
 			<div class="description-item-text" v-else-if="description.type === 'text'" v-html="description.value"></div>
 		</div>
 	</div>
@@ -10,44 +10,17 @@
 
 <script>
 
-import {mapGetters} from 'vuex';
-
 export default {
 	name: 'post-show',
+	props: ['post'],
 	data() {
 		return {
-			post: null
+			
 		}
 	},
 	computed: {
-		...mapGetters(['SHOWN_POSTS', 'ISADMIN'])
-	},
-	watch: {
-		'$route.params.id'(id) {
-			this.checkPost(+id);
-		}
-	},
-	created() {
-		this.checkPost(+this.$route.params.id);
-	},
-	methods: {
-		checkPost(id) {
-			if (isNaN(id)) {
-				this.$router.replace({name: 'post-show', params: {id: this.SHOWN_POSTS[0].id}});
-				return;
-			}
-			
-			this.post = null;
-			this.SHOWN_POSTS.forEach(el => {
-				if (el.id === id) {
-					this.post = el;
-				}
-			});	
-				
-			if (!this.post) this.$router.replace({name: 'post-show', params: {id: this.SHOWN_POSTS[0].id}});
-		}
-	}
-	
+		
+	}	
 }
 
 </script>
