@@ -38,6 +38,11 @@ export default new Router({
 			component: () => import('@/views/registration.vue')
 		},
 		{
+			name: 'map',
+			path: '/map',
+			component: () => import('@/views/map.vue')
+		},
+		{
 			name: 'post-home',
 			path: '/posts/:id',
 			component: () => import('@/views/post-home.vue'),
