@@ -22,7 +22,7 @@ export default {
 		}
 	},
 	mounted() {
-	
+
 	},
 	computed: {
 		balloonTemplate() {
