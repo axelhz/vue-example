@@ -11,7 +11,6 @@ export default new Router({
 			component: () => import('@/views/home.vue')
 		},
 		{
-			name: 'posts-home',
 			path: '/posts',
 			component: () => import('@/views/posts-home.vue'),
 			children: [
@@ -43,7 +42,6 @@ export default new Router({
 			component: () => import('@/views/map.vue')
 		},
 		{
-			name: 'post-home',
 			path: '/posts/:id',
 			component: () => import('@/views/post-home.vue'),
 			children: [

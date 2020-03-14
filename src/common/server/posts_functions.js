@@ -54,24 +54,62 @@ export default {
 			.catch(error => reject(error))
 		})
 	},
-	createPost: post => {
+	createPost: (post, session_hash) => {
 		return new Promise((resolve, reject) => {
-			getData('posts', default_posts)
-			.then(posts => {
-				let finding = posts.find(el => el.title === post.title);
-				
-				if (finding) {
-					resolve(JSON.stringify({success: false, message: 'Такой заголовок уже существует!'}))
-				} else {
-					let new_id = posts[0].id + 1;
-					
-					post.id = new_id;
-					post.status = 'confirmed';
-					post.status_text = 'Подтверждён';
-					posts.unshift(post);
-					setData('posts', posts)
-					.then(() => {
-						resolve(JSON.stringify({success: true, data:{posts: posts, new_id: new_id}}));
+			getData('loggings', [])
+				.then(loggings => {
+					let finding = loggings.find(el => el.session_hash === session_hash);
+
+					if (!finding) throw new Error('Сессия не найдена');
+				else {
+					getData('posts', default_posts)
+					.then(posts => {
+						let finding = posts.find(el => el.title === post.title);
+
+						if (finding) {
+							resolve(JSON.stringify({success: false, message: 'Такой заголовок уже существует!'}))
+						} else {
+							let new_id = posts[0].id + 1;
+
+							post.id = new_id;
+							post.status = 'confirmed';
+							post.status_text = 'Подтверждён';
+							posts.unshift(post);
+							setData('posts', posts)
+								.then(() => {
+									resolve(JSON.stringify({success: true, data:{posts: posts, new_id: new_id}}));
+								})
+								.catch(error => reject(error))
+						}
+						})
+					.catch(error => reject(error))
+				}
+			})
+			.catch(error => reject(error))
+		})
+	},
+	changePost: (post, session_hash) => {
+		return new Promise((resolve, reject) => {
+			getData('loggings', [])
+			.then(loggings => {
+				let finding = loggings.find(el => el.session_hash === session_hash);
+
+				if (!finding) throw new Error('Сессия не найдена');
+				else {
+					getData('posts', default_posts)
+					.then(posts => {
+						let finding_index = posts.findIndex(el => el.id === post.id);
+
+						if (finding_index === -1) reject(JSON.stringify({success: false, message: 'Пост не найден'}));
+						else {
+							post.status = posts[finding_index].status;
+							posts[finding_index] = post;
+							setData('posts', posts)
+								.then(() => {
+									resolve(JSON.stringify({success: true, data:{posts: posts}}));
+								})
+								.catch(error => reject(error))
+						}
 					})
 					.catch(error => reject(error))
 				}
@@ -79,39 +117,27 @@ export default {
 			.catch(error => reject(error))
 		})
 	},
-	changePost: post => {
+	savePosts: (posts, session_hash) => {
 		return new Promise((resolve, reject) => {
-			getData('posts', default_posts)
-			.then(posts => {
-				let findingIndex = posts.findIndex(el => el.id === post.id);
-					
-					if (findingIndex === -1) reject(JSON.stringify({success: false, message: 'Пост не найден'}));
-					else {
-						post.status = posts[findingIndex].status;
-						posts[findingIndex] = post;
-						setData('posts', posts)
-						.then(() => {
-							resolve(JSON.stringify({success: true, data:{posts: posts}}));
-						})
-						.catch(error => reject(error))
+			getData('loggings', [])
+			.then(loggings => {
+				let finding = loggings.find(el => el.session_hash === session_hash);
+
+				if (!finding) throw new Error('Сессия не найдена');
+				else {
+					for (let i = 0; i < posts.length; i++) {
+						if (posts[i].deleted) {
+							posts.splice(i, 1);
+							i--;
+						} else delete posts[i].deleted;
 					}
+					setData('posts', posts)
+					.then(() => {
+						resolve(JSON.stringify({success: true, data:{posts: posts}}));
+					})
+					.catch(error => reject(error))
+				}
 			})
-			.catch(error => reject(error))
-		})
-	},
-	savePosts: posts => {
-		return new Promise((resolve, reject) => {
-			for (let i = 0; i < posts.length; i++) {
-				if (posts[i].deleted) {
-					posts.splice(i, 1);
-					i--;
-				} else delete posts[i].deleted;
-			}
-			setData('posts', posts)
-			.then(() => {
-				resolve(JSON.stringify({success: true, data:{posts: posts}}));
-			})
-			.catch(error => reject(error))
 		})
 	}
 	

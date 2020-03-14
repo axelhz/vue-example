@@ -8333,6 +8333,10 @@ vue-cookies@^1.6.1:
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.6.1.tgz#ab036382d37a3f4c83140e0175d9dc60ce67fe01"
   integrity sha512-qyzhuq0x9xLEwniSXFoEsFErHgQ24jviB527IDul+8KrlxU9jdqrvVunRRBk4lPpxPgL0ywv8NxcD6MDWcTMug==
 
+vue-device-detector@weilbith/vue-device-detector:
+  version "1.0.0"
+  resolved "https://codeload.github.com/weilbith/vue-device-detector/tar.gz/025cde96cc8c99a29f35cd60bb65c008a9e0881c"
+
 vue-eslint-parser@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.0.0.tgz#a4ed2669f87179dedd06afdd8736acbb3a3864d6"
@@ -8366,13 +8370,6 @@ vue-localstorage@^0.6.2:
   resolved "https://registry.yarnpkg.com/vue-localstorage/-/vue-localstorage-0.6.2.tgz#7f84c99f4ce0b6be23b16c1fab194d4d67182456"
   integrity sha512-29YQVVkIdoS6BZBCJAyu9d0OR0eKSm5gk5OjsLssV1+NM4zJnf9cxhN1AVeXkUHJLqOonECweuaR8PZ2x307dw==
 
-vue-mobile-detection@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/vue-mobile-detection/-/vue-mobile-detection-1.0.0.tgz#1c0d6f80fa4745c1c528e07968ae351d9e32af83"
-  integrity sha512-84hsJEYTcXjAlqigg/5XfFYfIyGKtcI3rCHOOFyf99RcuMfYyMQ6wUwCCB52rf8k4xL/3DKUY4hx+vF2psgqFQ==
-  dependencies:
-    vue "^2.6.10"
-
 vue-router@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.5.tgz#ff29b8a1e1306c526b52d4dc0532109f16c41231"
@@ -8404,7 +8401,7 @@ vue-yandex-maps@^0.10.6:
   resolved "https://registry.yarnpkg.com/vue-yandex-maps/-/vue-yandex-maps-0.10.6.tgz#69b40cba0e33b00c6fa2d01813c1dad4e3d1623f"
   integrity sha512-vXOBvNw0kEFMDAd/EgRYD3ac34tI9L2ejN8LDSiMhj7ypGcdR1z99lYFM3WA3+qbDi2bFD5hmit7HOTxFcTqcg==
 
-vue@^2.6.10, vue@^2.6.11:
+vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

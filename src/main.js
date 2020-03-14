@@ -6,16 +6,14 @@ import VueCookies from 'vue-cookies';
 import VueLocalStorage from 'vue-localstorage';
 import router from '@/router';
 import YmapPlugin from 'vue-yandex-maps';
-import VueMobileDetection from "vue-mobile-detection";
+import VueDeviceDetector from 'vue-device-detector'
 
 Vue.config.productionTip = false;
 
 Vue.use(VueCookies);
 Vue.$cookies.config('7d');
-
 Vue.use(VueLocalStorage);
-
-Vue.use(VueMobileDetection);
+Vue.use(VueDeviceDetector)
 
 const settings = {
 	apiKey: '',

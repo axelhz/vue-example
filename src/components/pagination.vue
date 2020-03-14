@@ -33,11 +33,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.pagination-wrapper {
-		display: flex;
-	}
-	
-	.active {
-		text-decoration: underline;
+	.pagination {
+		&-wrapper {
+			margin: 15px 0px 25px 0px;
+			display: flex;
+			align-items: center;
+		}
+
+		&-page {
+			font-size: 1.3rem;
+			margin: 0px 2px;
+			cursor: pointer;
+			&.active {
+				border-bottom: 3px solid black;
+				font-weight: bold;
+				font-size: 1.5rem;
+			}
+		}
 	}
 </style>

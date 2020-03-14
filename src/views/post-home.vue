@@ -1,10 +1,11 @@
 <template>
-	<div class="post-wrapper">
-		<div v-if="ISADMIN">
-			<router-link :to="{name: 'post-show'}">Просмотр</router-link>
-			<router-link :to="{name: 'post-editor'}">Редактирование</router-link>
+	<div class="local-wrapper">
+		<div class="header-common" v-if="ISADMIN">{{getHeader(post)}}</div>
+		<div v-if="ISADMIN" class="options-wrapper">
+			<router-link :to="{name: 'post-show'}" class="link-option">Просмотр</router-link>
+			<router-link :to="{name: 'post-editor'}" class="link-option">Редактирование</router-link>
 		</div>
-		<router-view :post="post" @changePost="changePost"></router-view>
+		<router-view :post="post"></router-view>
 	</div>
 </template>
 
@@ -57,8 +58,14 @@ export default {
 				if (!this.post) this.$router.replace({name: 'post-show', params: {id: this.ISADMIN ? this.ALL_POSTS[0].id : this.SHOWN_POSTS[0].id}});
 			}
 		},
-		changePost(post) {
-			this.post = post;
+		getHeader(post) {
+			if (!post) return 'Неопределенный пост';
+			else {
+				if (post.id === 0) {
+					return 'Новый пост'
+				}
+				return 'Пост №' + post.id;
+			}
 		}
 	}
 }
@@ -66,5 +73,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	
+	.local-wrapper {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: black;
+	}
 </style>

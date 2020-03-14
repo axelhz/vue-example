@@ -1,31 +1,29 @@
 <template>
-	<div class="editor-common" v-if="post">
+	<div class="post-wrapper" v-if="post">
 		<ul class="errors-common">
 			<li class="error-common" v-for="(error, i) in errors" :key="i">{{ error }}</li>
 		</ul>
-		<form @submit.prevent="submitForm" class="form-common">
-			<div class="label-common">Заголовок</div>
+		<form class="form-common" @submit.prevent="submitForm">
+			<div class="editor-label">1) Заголовок:</div>
 			<fieldset class="fieldset-common">
-				<input type="text" placeholder="Заголовок" v-model="post.title" class="input-common"/>
+				<input type="text" class="input-common" placeholder="Заголовок" v-model="post.title"/>
 			</fieldset>
-			<div class="label-common">Фоновая картинка</div>
+			<div class="editor-label">2) Фоновая картинка:</div>
 			<fieldset class="fieldset-common">
 				<file-select v-model="post.img" :filename="post.img"></file-select>
 			</fieldset>
-			<div class="label-common">Описание</div>
-			<div class="post-adder">
-				<div @click="post.description.push({type: 'text', value: ''})">Добавить текст</div>
-				<div @click="post.description.push({type: 'img', value: ''})">Добавить картинку</div>
+			<div class="editor-label">3) Описание:</div>
+			<div class="post-adder-wrapper">
+				<div @click="post.description.push({type: 'text', value: ''})" class="post-adder">Добавить текст</div>
+				<div @click="post.description.push({type: 'img', value: ''})" class="post-adder">Добавить картинку</div>
 			</div>
 			<div class="description-item" v-for="(description, i) in post.description" :key="i">
 				<file-select v-model="description.value" :filename="description.value" v-if="description.type === 'img'"></file-select>
 				<textarea class="textarea-common" v-if="description.type === 'text'" v-model="description.value"></textarea>
 				<div class="description-item-deleter" @click="post.description.splice(i, 1)">x</div>
 			</div>
-			
 			<button class="button-common">Сохранить</button>
 		</form>
-	
 	</div>
 </template>
 
@@ -95,14 +93,15 @@ export default {
 			this.errors = [];
 			if (this.validateData()) {
 				let {id, title, description, img} = this.post,				
-					action = id === 0 ? this.$store.dispatch('CREATE_POST', {title, description, img}) : this.$store.dispatch('CHANGE_POST', {id, title, description, img});
+					action = id === 0 ? this.$store.dispatch('CREATE_POST', {post: {title, description, img}, session_hash: this.$cookies.get('vue_example_user')}) :
+										this.$store.dispatch('CHANGE_POST', {post: {id, title, description, img}, session_hash: this.$cookies.get('vue_example_user')});
 				
 				action.then(new_id => {
 					if (new_id) this.$router.replace({name: 'post-editor', params: { id: new_id }});
-					return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: 'Пост сохранен!', type: 'success'});
+					return this.$store.dispatch('ADD_MESSAGE', {text: 'Пост сохранен!', type: 'success'});
 				})
 				.catch(({type, message}) => {
-					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				}) 
 			}
@@ -113,48 +112,55 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.editor-common {
-		width: 100%;
-		max-width: 70%;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		
+	.mobile {
+		.description-item-deleter {
+			left: -17px;
+			border: none;
+			font-size: 1.2rem;
+		}
 	}
 	.form-common {
 		width: 100%;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-	}
-	.textarea-common {
-		min-height: 100px;
-		width: 100%;
-	}
-	.title {
-		font-size: 1.6rem;
-		width: 100%;
-		text-align: center;
-		margin-bottom: 50px;
 	}
 	.description-item {
 		width: 100%;
 		margin-bottom: 30px;
+		position: relative;
+		&-img {
+			width: 100%;
+			height: calc(100vw*500/1920);
+			object-fit: cover;
+			max-height: 500px;
+		}
+		&-text {
+			padding: 0 20px 0px 0px;
+		}
+
+		&-deleter {
+			position: absolute;
+			left: -30px;
+			top: 0;
+			border: 1px solid black;
+			border-radius: 100%;
+			padding: 4px 4px 8px 4px;
+			line-height: 50%;
+			cursor: pointer;
+			font-size: 1.1rem;
+		}
 	}
 
-	.description-item-img {
-		width: 100%;
-		height: calc(100vw*500/1920);
-		object-fit: cover;
-		max-height: 500px;
-	}
-
-	.description-item-text {
-		padding: 0 20px 0px 0px;
-	}
-	
 	.post-adder {
-		display: flex;
-	}
+		border: 1px solid black;
+		border-radius: 5px;
+		padding: 3px 5px;
+		cursor: pointer;
 
+		&:first-child {
+			margin-right: 10px;
+		}
+		&-wrapper {
+			display: flex;
+			margin: 20px 0px 30px 0px;
+		}
+	}
 </style>

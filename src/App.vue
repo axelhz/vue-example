@@ -3,7 +3,7 @@
 		<block-header></block-header>
 		<router-view></router-view>
 		<block-footer></block-footer>	
-		<message-box v-if="MESSAGE_TEXT" :message_text="MESSAGE_TEXT"></message-box>
+		<message-box v-if="MESSAGES.length"></message-box>
 	</div>
 </template>
 
@@ -13,9 +13,11 @@ import BlockHeader from './components/header.vue';
 import BlockFooter from './components/footer.vue';
 import MessageBox from './components/message-box.vue';
 import {mapGetters} from 'vuex';
+import device_detection from "./common/device_detection";
 
 export default {
 	name: 'App',
+	mixins: [device_detection],
 	components: {
 		BlockHeader, BlockFooter, MessageBox  
 	},
@@ -24,42 +26,50 @@ export default {
 			
 		}
 	},
-	mounted() {	
+	watch: {
+		device(value) {
+			let root = document.getElementsByTagName( 'html' )[0];
+			if (value === 'mobile') {
+				root.classList.add('mobile');
+			} else {
+				root.classList.remove('mobile');
+			}
+		}
+	},
+	mounted() {
 		if (this.$cookies.get('vue_example_user')) {
 			this.$store.dispatch('GET_USER_THROUGH_HASH', this.$cookies.get('vue_example_user'))
 			.then(session_hash => {
 				this.$store.dispatch('GET_ALL_POSTS', session_hash)
 				.catch(({type, message}) => {
-					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				})
 			})
 			.catch(({type, message}) => {
-				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
 			})
 		}
 		this.$store.dispatch('GET_SHOWN_POSTS')
 		.catch(({type, message}) => {
-			if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+			if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 			console.error(message);
 		})
 	},
 	computed: {
-		...mapGetters(['MESSAGE_TEXT'])
+		...mapGetters(['MESSAGES'])
 	},
 	methods: {}
  }
 
 </script>
 
-<style>
+<style lang="scss">
 	#app {
-		width: 100vw;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		color: #f60;
-		font-size: 16px;
 	}
 </style>

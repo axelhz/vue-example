@@ -1,20 +1,21 @@
 <template>
-    <div class="block-header-container">
-        <router-link :to="{name: 'home'}" class="logo-container">
-            <div class="logo">Фильмы</div>
-            <div class="logo-text">Лучшие</div>
-        </router-link>
-        <div class="container" v-if="ISAUTHETICATED">
-			<router-link v-if="ISADMIN" :to="{name: 'post-editor', params: {id: 0}}">+</router-link>
-			<router-link v-if="ISADMIN" :to="{name: 'posts-editor'}">Р</router-link>
-			<div class="profile-img"></div>
-			<div class="profile-username">{{ USERNAME }}</div>
-			<div class="profile-label">Корзина</div>
-			<div class="profile-label" @click="exitUser">Выйти</div>
-        </div>
-        <div class="container" v-else>
-             <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>
-             <router-link :to="{name: 'registr'}" class="profile-label">Зарегистрироваться</router-link>
+    <div class="header-container">
+        <div class="wrapper-common horizontal">
+            <router-link :to="{name: 'home'}" class="logo-container">
+                <div class="logo">Фильмы</div>
+                <div class="logo-text">Лучшие</div>
+            </router-link>
+            <div class="profile-container" v-if="ISAUTHETICATED">
+                <router-link v-if="ISADMIN" :to="{name: 'post-editor', params: {id: 0}}" class="profile-label bigger">+</router-link>
+                <router-link v-if="ISADMIN" :to="{name: 'posts-editor'}" class="profile-list"></router-link>
+                <div class="profile-img"></div>
+                <div class="profile-username">{{ USERNAME }}</div>
+            </div>
+            <div class="profile-container" v-else>
+                <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>
+                <router-link :to="{name: 'registr'}" class="profile-label">Зарегистрироваться</router-link>
+            </div>
+            <div class="profile-label" @click="exitUser" v-if="ISAUTHETICATED">Выйти</div>
         </div>
     </div>
 </template>
@@ -22,12 +23,13 @@
 <script>
 
 import {mapGetters} from 'vuex';
+import device_detection from "../common/device_detection";
 
 export default {
     name: 'block-header',
     props: [],
     directives: {},
-    mixins: [],
+    mixins: [device_detection],
     components: {},
     data() {
         return {
@@ -47,7 +49,7 @@ export default {
                 if (this.$router.currentRoute.name !== 'home') this.$router.push({name: 'home'});
             })
 			.catch(({type, message}) => {
-				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
 			})
         }
@@ -57,8 +59,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .mobile {
+         .profile-img {
+            width: 25px;
+            height: 25px;
+        }
 
-    .block-header-container {
+        .profile-list {
+            width: 20px;
+            height: 20px;
+        }
+    }
+
+    .header-container {
         background: black;
         height: 55px;
         width: 100%;
@@ -67,24 +80,50 @@ export default {
         align-items: center;
     }
 
-    .profile-img {
-        width: 36px;
-        height: 36px;
-        background: url('../images/icons/profile_face.svg') no-repeat center;
-        background-size: contain;
-    }
-
     .logo {
-        font-size: 2rem;
+        font-size: 1.8rem;
         line-height: 90%;
+
+        &-text {
+            text-align: center;
+        }
     }
 
-    .logo-text {
-        text-align: center;
-    }
+    .profile {
+        &-container {
+            display: flex;
+            align-items: center;
+        }
 
-    .container {
-        display: flex;
-        align-items: center;
+        &-username {
+            margin: 0px 3px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #f60;
+        }
+
+        &-label {
+            font-size: 1.1rem;
+            margin-left: 4px;
+
+            &.bigger {
+                font-size: 1.6rem;
+            }
+        }
+
+        &-img {
+            margin-right: 3px;
+            width: 36px;
+            height: 36px;
+            background: url('../images/icons/profile_face.svg') no-repeat center;
+            background-size: contain;
+        }
+
+        &-list {
+            margin: 0px 5px;
+            width: 27px;
+            height: 27px;
+            background: url('../images/icons/list.png') no-repeat center;
+            background-size: contain;
+        }
     }
 </style>

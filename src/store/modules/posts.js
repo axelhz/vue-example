@@ -56,9 +56,9 @@ export default {
 				})
 			})
 		},
-		CREATE_POST: (state, post) => {
+		CREATE_POST: (state, {post, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.createPost(post)
+				posts_functions.createPost(post, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
@@ -72,9 +72,9 @@ export default {
 				})
 			})
 		},
-		CHANGE_POST: (state, post) => {
+		CHANGE_POST: (state, {post, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.changePost(post)
+				posts_functions.changePost(post, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
@@ -88,9 +88,9 @@ export default {
 				})
 			})
 		},
-		SAVE_POSTS: (state, posts) => {
+		SAVE_POSTS: (state, {posts, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.savePosts(posts)
+				posts_functions.savePosts(posts, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});

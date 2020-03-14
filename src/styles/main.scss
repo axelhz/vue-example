@@ -1,5 +1,6 @@
 @import './fonts.scss';
 @import './dom.scss';
+@import './constants.scss';
 @import '../../node_modules/swiper/css/swiper.css';
 
 @mixin select-off() {
@@ -10,12 +11,17 @@
 	-webkit-user-grag: none;
 }
 
+@mixin flex-column-center() {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 @mixin btn($bg-color, $text-color) {
 	@include select-off;
-	height: 24px;
-	width: 180px;
-	font-size: 0.9rem;
-	border-radius: 4px;
+	height: 28px;
+	width: 200px;
+	border-radius: 3px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -23,6 +29,8 @@
 	cursor: pointer;
 	background: $bg-color;
 	color: $text-color;
+	font-family: 'Comic Sans MS';
+	font-size: 0.9rem;
 }
 
 .button-common {
@@ -32,22 +40,145 @@
 .wrapper-common {
 	max-width: 1920px;
 	width: 100%;
-	display: flex;
-	flex-direction: column;
+	@include flex-column-center;
 	justify-content: center;
-	align-items: center;
+	padding-bottom: 30px;
+
+	&.horizontal {
+		flex-direction: row;
+		justify-content: space-around;
+		padding-bottom: 0px;
+	}
 }
 
 .post-wrapper {
 	width: 100%;
 	max-width: 1400px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	@include flex-column-center;
 	color: black;
-	padding-top: 60px;
+	padding-top: 20px;
+	padding-bottom: 30px;
+
+	@media (max-width: 1450px) {
+		max-width: 90%;
+	}
+}
+
+.editor-label {
+	margin-bottom: 10px;
+	margin-top: 30px;
+	display: flex;
+	font-style: italic;
+	font-size: 1.1rem;
+
+	&:first-child {
+		margin-top: 0px;
+	}
+}
+
+.options-wrapper {
+	margin: 30px 0px 20px 0px;
 }
 
 .header-common {
-	text-decoration: underline;
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin: 15px 0px;
 }
+
+.fieldset-common {
+	width: 100%;
+	margin-bottom: 1px;
+}
+
+.errors-common {
+	margin-bottom: 15px;
+	@include flex-column-center;
+}
+
+.error-common {
+	color: #FA0000;
+}
+
+.form-common {
+	width: 200px;
+}
+
+.input-common {
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.question-common {
+	margin-top: 10px;
+	font-size: 1.1rem;
+}
+
+.textarea-common {
+	min-height: 100px;
+	width: 100%;
+	max-width: 100%;
+}
+
+.link-option {
+	color: black;
+	font-size: 1.1rem;
+
+	&:first-child {
+		margin-right: 10px;
+	}
+
+	&.router-link-exact-active {
+		border-bottom: 2px solid #f60;
+		color: #f60;
+	}
+}
+
+.table-common {
+	width: 80%;
+	max-width: 1800px;
+	border-spacing: 0 2rem;
+	min-height: 465px;
+}
+
+.td-common {
+	padding: 5px;
+}
+
+.mobile {
+	.form-common {
+		width: 170px;
+	}
+
+	.button-common {
+		width: 170px;
+	}
+
+	.options-wrapper {
+		margin: 30px 0px 20px 0px;
+	}
+
+	.table-common {
+		width: 98%;
+		border-spacing: 0 1rem;
+
+	}
+
+	.td-common {
+		border: 1px solid black;
+
+		&:nth-child(2n):not(:last-child) {
+			border-right: none;
+			border-left: none;
+		}
+
+		&:last-child {
+			border-left: none;
+		}
+	}
+
+	.th-common {
+		font-size: 1.4rem;
+	}
+}
+

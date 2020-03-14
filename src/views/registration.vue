@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper-common">
 		<div class="header-common">Регистрация</div>
-		<ul class="errors-common">
+		<ul class="errors-common" v-if="errors.length">
 			<li class="error-common" v-for="(error, i) in errors" :key="i">{{ error }}</li>
 		</ul>
 		<form @submit.prevent="submitForm(username, password)" class="form-common">
@@ -22,8 +22,6 @@
 
 <script>
 
-import {mapGetters} from 'vuex';
-
 export default {
 	name: 'registration',
 	components: {},
@@ -36,9 +34,6 @@ export default {
 			password: null,
 			repeat_password: null
 		}
-	},
-	computed: {
-		...mapGetters(['ENABLED_COOKIES'])
 	},
 	methods: {
 		validateData() {
@@ -64,16 +59,16 @@ export default {
 			if (this.validateData()) {
 				this.$store.dispatch('REGISTRATE_USER', {username, password})
 				.then((session_hash) => {
-					if (this.ENABLED_COOKIES) this.$cookies.set('vue_example_user', session_hash);
+					this.$cookies.set('vue_example_user', session_hash);
 					this.$router.push({name: 'home'});
 					this.$store.dispatch('GET_ALL_POSTS', session_hash)
 					.catch(({type, message}) => {
-						if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+						if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 						console.error(message);
 					})
 				}) 
 				.catch(({type, message}) => {
-					if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				})
 			}

@@ -1,8 +1,7 @@
 <template>
 	<div class="wrapper-common">
-		<posts-show></posts-show> 
+		<posts-show></posts-show>
 		<Map></Map>
-	
 	</div>
 </template>
 
@@ -10,7 +9,6 @@
 	
 import PostsShow from '@/views/posts-show.vue';
 import Map from '@/views/map.vue';
-
 
 export default {
 	name: 'home',
@@ -25,5 +23,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
+	.wrapper-common {
+		padding-bottom: 0px;
+	}
 </style>

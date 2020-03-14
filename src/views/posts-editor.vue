@@ -1,19 +1,18 @@
 <template>
 	<div class="wrapper-common">
-		<table class="posts-table">
+		<table class="table-common">
 			<tr class="tr-common">
-				<th class="th-common">ID</th>
-				<th class="th-common">Title</th>
-				<th class="th-common">Статус</th>
-				<th class="th-common"></th>
+				<th class="th-common id">ID</th>
+				<th class="th-common title">Title</th>
+				<th class="th-common status">Статус</th>
+				<th class="th-common delete">X</th>
 			</tr>
-			<tr v-for="(post, i) in paged_posts" :key="i" :class="[post.deleted ? 'deleted' : '', 'tr-common']">
-				<td class="td-common href"><router-link :to="{name: 'post-show', params: {id: post.id}}">{{post.id}}</router-link></td>
-				<td class="td-common href"><router-link :to="{name: 'post-show', params: {id: post.id}}">{{post.title}}</router-link></td>
-				<td class="td-common" @click="changeStatus(post, post.status)">{{post.status_text}}</td>
-				<td class="td-common" @click="post.deleted = !post.deleted">{{post.deleted ? 'Восстановить' : 'Удалить'}}</td>
+			<tr v-for="(post, i) in paged_posts" :key="i" class="tr-common" :class="getTrClass(post)">
+				<td class="td-common id href" align="center"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.id}}</router-link></td>
+				<td class="td-common title href"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.title}}</router-link></td>
+				<td class="td-common status" align="center" @click="changeStatus(post, post.status)">{{post.status_text}}</td>
+				<td class="td-common delete" align="center" @click="post.deleted = !post.deleted">{{post.deleted ? 'Восстановить' : 'Удалить'}}</td>
 			</tr>
-			
 		</table>
 		<pagination :elements_length="ALL_POSTS.length" :page_size="page_size" @pageChanged="pageChanged"></pagination>
 		<div class="button-common" @click="savePosts(ALL_POSTS)">Сохранить</div>
@@ -59,18 +58,23 @@ export default {
 			})
 		},
 		savePosts(posts) {
-			this.$store.dispatch('SAVE_POSTS', posts)
+			this.$store.dispatch('SAVE_POSTS', {posts, session_hash: this.$cookies.get('vue_example_user')})
 			.then(() => {
 				this.setDeleted(this.ALL_POSTS);
-				return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: 'Посты сохранены!', type: 'success'})
+				return this.$store.dispatch('ADD_MESSAGE', {text: 'Посты сохранены!', type: 'success'})
 			})
 			.catch(({type, message}) => {
-				if (type === 'user') return this.$store.dispatch('CHECK_MESSAGE_TEXT', {new_message_text: message, type: 'error'});
+				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
 			}) 
 		},
 		pageChanged(i) {
 			this.current_page = i;
+		},
+		getTrClass(post) {
+			if (post.deleted) return 'deleted';
+			if (post.status === 'confirmed') return 'confirmed';
+			return 'shown';
 		}
 	}
 }
@@ -78,13 +82,62 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.deleted {
+	.mobile {
+		.td-common, .th-common {
+			&.delete {
+				min-width: 83px;
+				max-width: 83px;
+			}
+
+			&.status {
+				min-width: 96px;
+				max-width: 96px;
+			}
+
+			&.id {
+				min-width: 22px;
+				max-width: 22px;
+				padding: 0px 3px;
+			}
+		}
+	}
+
+	.deleted *:not(.delete) {
 		text-decoration: line-through;
+	}
+
+	.shown {
+		background: #94E5B6;
+	}
+
+	.confirmed {
+		background: #FBFCA8;
 	}
 	
 	.tr-common:not(.deleted) .href {
-		text-decoration: underline;
 		cursor: pointer;
 	}
 
+	.td-common, .th-common {
+		&.delete {
+			min-width: 122px;
+			max-width: 122px;
+		}
+
+		&.status {
+			min-width: 135px;
+			max-width: 135px;
+		}
+
+		&.id {
+			min-width: 34px;
+			max-width: 34px;
+		}
+	}
+
+	.td-common {
+		&.delete, &.status {
+			cursor: pointer;
+		}
+	}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="fileselect-wrapper">
-		<input type="file" @change="handleFileChange" class="inputfield-novaluetext">
+		<input type="file" @change="handleFileChange" class="fileselect-inputfile">
 		<div class="fileselect-text">{{ filename }}</div>
 	</div>
 </template>
@@ -16,21 +16,28 @@ export default {
 }
 </script>
 
-<style scoped>
-
-	.fileselect-wrapper {
-		width: 100%;
-		position: relative;
-		display: flex;
-	}
-	
-	.fileselect-text {
-		position: absolute;
-		left: 125px;
+<style scoped lang="scss">
+	.mobile {
+		.fileselect-text {
+			left: 120px;
+			top: 3px;
+		}
 	}
 
-	.inputfield-novaluetext {
-		color: transparent;
-	}
+	.fileselect {
+		&-wrapper {
+			width: 100%;
+			position: relative;
+			display: flex;
+		}
 
+		&-text {
+			position: absolute;
+			left: 125px;
+		}
+
+		&-inputfile {
+			color: transparent;
+		}
+	}
 </style>

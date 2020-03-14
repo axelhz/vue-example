@@ -1,7 +1,9 @@
 <template>
 	<div class="wrapper-common">
-		<router-link :to="{name: 'posts-show'}" v-if="this.ISADMIN">Просмотр</router-link>
-		<router-link :to="{name: 'posts-editor'}" v-if="this.ISADMIN">Редактирование</router-link>
+		<div class="options-wrapper" v-if="ISADMIN">
+			<router-link :to="{name: 'posts-show'}" class="link-option">Просмотр</router-link>
+			<router-link :to="{name: 'posts-editor'}" class="link-option">Редактирование</router-link>
+		</div>
 		<router-view></router-view>
 	</div>
 </template>
@@ -26,5 +28,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	
+	.wrapper-common {
+		color: black;
+	}
 </style>

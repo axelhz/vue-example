@@ -1,25 +1,25 @@
 <template>
-	<footer class="block-footer">
+	<footer class="footer-container">
 		<router-link class="footer-text" :to="{name: 'home', params: {}}">Лучшие Фильмы, 2020</router-link>
 	</footer>
 </template>
 
 <script>
-	
-	export default {
-		name: 'block-footer',
-		mixins: [],
-		data() {
-			return {
 
-			}
+export default {
+	name: 'block-footer',
+	mixins: [],
+	data() {
+		return {
+
 		}
 	}
+}
 
 </script>
 
 <style scoped lang="scss">
-	.block-footer {
+	.footer-container {
 		width: 100%;
 		max-width: 1920px;
 		background: black;
