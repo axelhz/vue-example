@@ -16,7 +16,7 @@ export default {
 			.catch(error => reject(error))
 		})
 	},
-	autheticateUser: ({username, password}) => {
+	authenticateUser: ({username, password}) => {
 		return new Promise((resolve, reject) => {
 			getData('users', default_users)
 			.then(users => {

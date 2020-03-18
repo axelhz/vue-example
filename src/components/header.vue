@@ -5,7 +5,7 @@
                 <div class="logo">Фильмы</div>
                 <div class="logo-text">Лучшие</div>
             </router-link>
-            <div class="profile-container" v-if="ISAUTHETICATED">
+            <div class="profile-container" v-if="ISAUTHENTICATED">
                 <router-link v-if="ISADMIN" :to="{name: 'post-editor', params: {id: 0}}" class="profile-label bigger">+</router-link>
                 <router-link v-if="ISADMIN" :to="{name: 'posts-editor'}" class="profile-list"></router-link>
                 <div class="profile-img"></div>
@@ -16,7 +16,7 @@
                 <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>
                 <router-link :to="{name: 'registr'}" class="profile-label">Зарегистрироваться</router-link>
             </div>
-            <div class="profile-label clickable" @click="exitUser" v-if="ISAUTHETICATED">Выйти</div>
+            <div class="profile-label clickable" @click="exitUser" v-if="ISAUTHENTICATED">Выйти</div>
         </div>
     </div>
 </template>
@@ -38,7 +38,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['USERNAME', 'ISAUTHETICATED', 'ISADMIN'])
+        ...mapGetters(['USERNAME', 'ISAUTHENTICATED', 'ISADMIN'])
     },
     methods: { 
         exitUser() {

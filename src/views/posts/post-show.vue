@@ -2,7 +2,7 @@
 	<div class="post-wrapper" v-if="post">
 		<div class="post-title">{{ post.title }}</div>
 		<div class="description-item" v-for="(description, i) in post.description" :key="i">
-			<img class="description-item-img" v-if="description.type === 'img' && description.value" :src="require('../images/posts/' + description.value)">
+			<img class="description-item-img" v-if="description.type === 'img' && description.value" :src="require('@/images/posts/' + description.value)">
 			<div class="description-item-text" v-else-if="description.type === 'text'" v-html="description.value"></div>
 		</div>
 	</div>

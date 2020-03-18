@@ -1,7 +1,7 @@
 <template>
     <div class="movie-wrapper">
         <div class="movie-name">{{movie.name}}</div>
-        <div class="movie-liker" :class="movie.liked ? 'liked' : ''" v-if="ISAUTHETICATED" @click="changeLike(movie)"></div>
+        <div class="movie-liker" :class="movie.liked ? 'liked' : ''" v-if="ISAUTHENTICATED" @click="changeLike(movie)"></div>
         <img class="movie-image"  :src="require('@/images/movies/' + movie.img)">
         <div class="movie-data">
             <div class="movie-data-item">
@@ -33,7 +33,7 @@
             }
         },
         computed: {
-            ...mapGetters(['ISAUTHETICATED'])
+            ...mapGetters(['ISAUTHENTICATED'])
         },
         methods: {
             changeLike(movie) {
@@ -51,21 +51,23 @@
 
 <style scoped lang="scss">
     .mobile {
-        .movie-image {
-            width: 290px;
-        }
+        .movie {
+            &-image {
+                width: 290px;
+            }
 
-        .movie-data {
-            padding: 0 10px;
-        }
+            &-data {
+                padding: 0 10px;
+            }
 
-        .movie-data-label {
-            min-width: 70px;
-        }
+            &-data-label {
+                min-width: 70px;
+            }
 
-        .movie-liker {
-            width: 40px;
-            height: 40px;
+            &-liker {
+                width: 40px;
+                height: 40px;
+            }
         }
     }
 
@@ -89,12 +91,12 @@
             margin-top: 10px;
             width: 70px;
             height: 70px;
-            background: url('../images/icons/heart.png') no-repeat center;
+            background: url('../../images/icons/heart.png') no-repeat center;
             background-size: contain;
             cursor: pointer;
 
             &.liked {
-                background: url('../images/icons/heart-full.png') no-repeat center;
+                background: url('../../images/icons/heart-full.png') no-repeat center;
                 background-size: contain;
             }
         }

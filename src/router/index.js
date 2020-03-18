@@ -12,24 +12,24 @@ export default new Router({
 		},
 		{
 			path: '/posts',
-			component: () => import('@/views/posts-home.vue'),
+			component: () => import('@/views/posts/posts-home.vue'),
 			children: [
 				{
 					name: 'posts-show',
 					path: '',
-					component: () => import('@/views/posts-show.vue')
+					component: () => import('@/views/posts/posts-show.vue')
 				},
 				{
 					name: 'posts-editor',
 					path: 'editor',
-					component: () => import('@/views/posts-editor.vue')
+					component: () => import('@/views/posts/posts-editor.vue')
 				}
 			]
 		},
 		{
 			name: 'auth',
 			path: '/auth',
-			component: () => import('@/views/authetication.vue')
+			component: () => import('@/views/authentication.vue')
 		},
 		{
 			name: 'registr',
@@ -43,41 +43,41 @@ export default new Router({
 		},
 		{
 			path: '/posts/:id',
-			component: () => import('@/views/post-home.vue'),
+			component: () => import('@/views/posts//post-home.vue'),
 			children: [
 				{
 					name: 'post-show',
 					path: '',
-					component: () => import('@/views/post-show.vue'),
+					component: () => import('@/views/posts/post-show.vue'),
 					
 				},
 				{
 					name: 'post-editor',		
 					path: 'editor',
-					component: () => import('@/views/post-editor.vue')
+					component: () => import('@/views/posts/post-editor.vue')
 				}
 			]
 		},
 		{
 			name: 'movies-show',
 			path: '/movies',
-			component: () => import('@/views/movies-show.vue'),
+			component: () => import('@/views/movies/movies-show.vue'),
 			props: { type: 'all' }
 		},
 		{
 			name: 'movies-likes',
 			path: '/likes',
-			component: () => import('@/views/movies-show.vue'),
+			component: () => import('@/views/movies/movies-show.vue'),
 			props: { type: 'likes' }
 		},
 		{
 			path: '/movies/:id',
-			component: () => import('@/views/movie-home.vue'),
+			component: () => import('@/views/movies/movie-home.vue'),
 			children: [
 				{
 					name: 'movie-show',
 					path: '',
-					component: () => import('@/views/movie-show.vue'),
+					component: () => import('@/views/movies/movie-show.vue'),
 
 				}
 			]

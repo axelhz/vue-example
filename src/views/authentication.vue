@@ -20,7 +20,7 @@
 <script>
 
 export default {
-	name: 'authetication',
+	name: 'authentication',
 	components: {},
 	mixins: [],
 	props: ['horizontal'],
@@ -49,7 +49,7 @@ export default {
 		submitForm(username, password) {
 			this.errors = [];
 			if (this.validateData()) {
-				let auth = this.$store.dispatch('AUTHETICATE_USER', {username, password})
+				let auth = this.$store.dispatch('AUTHENTICATE_USER', {username, password})
 				auth.then(session_hash => {
 					this.$cookies.set('vue_example_user', session_hash)
 					this.$router.push({name: 'home'})

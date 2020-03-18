@@ -7,13 +7,13 @@ export default {
 			name: null,
 			isAdmin: false
 		},
-		isAutheticated: false
+		isAuthenticated: false
 	},
 	getters: {
 		USERNAME: state => {
 			return state.user.name;
 		},
-		ISAUTHETICATED: (state, getters) => {
+		ISAUTHENTICATED: (state, getters) => {
 			return !!getters.USERNAME;
 		},
 		ISADMIN: state => {
@@ -49,9 +49,9 @@ export default {
 				})
 			})
 		},
-		AUTHETICATE_USER: (state, {username, password}) => {
+		AUTHENTICATE_USER: (state, {username, password}) => {
 			return new Promise((resolve, reject) => {
-				users_API.autheticateUser({username, password: MD5(password)})
+				users_API.authenticateUser({username, password: MD5(password)})
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) {

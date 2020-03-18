@@ -7,7 +7,7 @@
                     <img class="movie-image" :src="require('@/images/movies/' + movie.img)">
                 </router-link>
                 <router-link class="movie-name" :to="{name: 'movie-show', params: {id: movie.id}}">{{movie.name}} ({{movie.year}})</router-link>
-                <div class="movie-liker" :class="movie.liked ? 'liked' : ''" v-if="ISAUTHETICATED" @click="changeLike(movie)"></div>
+                <div class="movie-liker" :class="movie.liked ? 'liked' : ''" v-if="ISAUTHENTICATED" @click="changeLike(movie)"></div>
             </div>
         </div>
         <div v-else>Фильмы отсутствуют</div>
@@ -17,7 +17,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
-    import Pagination from "../components/pagination";
+    import Pagination from "@/components/pagination";
 
     export default {
         name: 'movies-show',
@@ -30,7 +30,7 @@
             }
         },
         computed: {
-            ...mapGetters(['MOVIES', 'LIKED_MOVIES', 'ISAUTHETICATED']),
+            ...mapGetters(['MOVIES', 'LIKED_MOVIES', 'ISAUTHENTICATED']),
             movies() {
                 if (this.type === 'all') return this.MOVIES;
                 return this.LIKED_MOVIES;
@@ -59,12 +59,13 @@
     .mobile {
         .movie {
             width: 290px;
+
+            &-image {
+                width: 290px;
+                height: 162px;
+            }
         }
 
-        .movie-image {
-            width: 290px;
-            height: 162px;
-        }
     }
 
     .movies-container {
@@ -82,38 +83,36 @@
         flex-direction: column;
         align-items: center;
         margin: 20px 10px 0px;
-    }
 
-    .movie-name {
-        margin-top: 3px;
-        font-size: 1.2rem;
-        font-style: italic;
-        max-width: 100%;
-        text-align: center;
-        color: black;
-        text-decoration: underline;
-    }
 
-    .movie-liker {
-        margin-top: 3px;
-        width: 50px;
-        height: 50px;
-        background: url('../images/icons/heart.png') no-repeat center;
-        background-size: contain;
-        cursor: pointer;
+        &-name {
+            margin-top: 3px;
+            font-size: 1.2rem;
+            font-style: italic;
+            max-width: 100%;
+            text-align: center;
+            color: black;
+            text-decoration: underline;
+        }
 
-        &.liked {
-            background: url('../images/icons/heart-full.png') no-repeat center;
+        &-liker {
+            margin-top: 3px;
+            width: 50px;
+            height: 50px;
+            background: url('../../images/icons/heart.png') no-repeat center;
             background-size: contain;
+            cursor: pointer;
+
+            &.liked {
+                background: url('../../images/icons/heart-full.png') no-repeat center;
+                background-size: contain;
+            }
+        }
+
+        &-image {
+            width: 374px;
+            height: 211px;
         }
     }
 
-    .movie-image {
-        width: 374px;
-        height: 211px;
-    }
-
-    router-link.wrapper {
-        position: relative;
-    }
 </style>

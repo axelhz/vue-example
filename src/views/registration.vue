@@ -68,7 +68,6 @@ export default {
 				registr.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash));
 
 				registr.catch(({type, message}) => {
-					console.log(2);
 					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				})

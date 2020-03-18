@@ -8,8 +8,8 @@
 
 <script>
 	
-import PostsShow from '@/views/posts-show.vue';
-import MoviesShow from '@/views/movies-show.vue';
+import PostsShow from '@/views/posts/posts-show.vue';
+import MoviesShow from '@/views/movies/movies-show.vue';
 import Map from '@/views/map.vue';
 
 export default {

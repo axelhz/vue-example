@@ -22,7 +22,7 @@
 
 import Swiper from 'swiper';
 import {mapGetters} from 'vuex';
-import device_detection from "../common/device_detection";
+import device_detection from "@/common/device_detection";
 
 export default {
 	name: 'posts-show',
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	@import "../styles/constants.scss";
+	@import "../../styles/constants.scss";
 
 	.mobile {
 		.post {
@@ -134,13 +134,13 @@ export default {
 		z-index: 2;
 
 		&-left {
-			background: url('../images/utils/arrow-left.png') no-repeat center;
+			background: url('../../images/utils/arrow-left.png') no-repeat center;
 			background-size: contain;
 			left: 15px;
 		}
 
 		&-right {
-			background: url('../images/utils/arrow-right.png') no-repeat center;
+			background: url('../../images/utils/arrow-right.png') no-repeat center;
 			background-size: contain;
 			right: 15px;
 		}
