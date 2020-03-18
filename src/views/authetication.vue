@@ -49,17 +49,15 @@ export default {
 		submitForm(username, password) {
 			this.errors = [];
 			if (this.validateData()) {
-				this.$store.dispatch('AUTHETICATE_USER', {username, password})
-				.then(session_hash => {
+				let auth = this.$store.dispatch('AUTHETICATE_USER', {username, password})
+				auth.then(session_hash => {
 					this.$cookies.set('vue_example_user', session_hash)
 					this.$router.push({name: 'home'})
-					this.$store.dispatch('GET_ALL_POSTS', session_hash)
-					.catch(({type, message}) => {
-						if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
-						console.error(message);
-					})
+					return this.$store.dispatch('GET_ALL_POSTS', session_hash)
 				})
-				.catch(({type, message}) => {
+				auth.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash))
+
+				auth.catch(({type, message}) => {
 					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				})

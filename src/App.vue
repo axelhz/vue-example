@@ -37,28 +37,36 @@ export default {
 		}
 	},
 	mounted() {
-		if (this.$cookies.get('vue_example_user')) {
-			this.$store.dispatch('GET_USER_THROUGH_HASH', this.$cookies.get('vue_example_user'))
-			.then(session_hash => {
+		let session_hash = this.$cookies.get('vue_example_user');
+		if (session_hash) {
+			let session_hash = this.$cookies.get('vue_example_user'),
+				getter = this.$store.dispatch('GET_USER_THROUGH_HASH', session_hash)
+			getter.then(() => {
 				this.$store.dispatch('GET_ALL_POSTS', session_hash)
-				.catch(({type, message}) => {
-					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
-					console.error(message);
-				})
-			})
-			.catch(({type, message}) => {
+			});
+			getter.then(() => {
+				this.$store.dispatch('GET_MOVIES', session_hash)
+			});
+			getter.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
 			})
+		} else {
+			this.$store.dispatch('GET_MOVIES')
+			.catch(({type, message}) => {
+				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
+				console.error(message);
+			});
 		}
+
 		this.$store.dispatch('GET_SHOWN_POSTS')
 		.catch(({type, message}) => {
 			if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 			console.error(message);
-		})
+		});
 	},
 	computed: {
-		...mapGetters(['MESSAGES'])
+		...mapGetters(['MESSAGES', 'MOVIES', 'LIKED_MOVIES'])
 	},
 	methods: {}
  }

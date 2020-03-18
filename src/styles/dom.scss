@@ -62,7 +62,7 @@ a:-webkit-any-link {
 	cursor: pointer;
 	color: black;
 
-	&:not(.button-common):not(.link-option):not(.td-link) {
+	&:not(.button-common):not(.link-option):not(.td-link):not(.movie-name) {
 		color: #f60;
 	}
 

@@ -57,17 +57,18 @@ export default {
 		submitForm(username, password) {
 			this.errors = [];
 			if (this.validateData()) {
-				this.$store.dispatch('REGISTRATE_USER', {username, password})
-				.then((session_hash) => {
+				let registr = this.$store.dispatch('REGISTRATE_USER', {username, password});
+
+				registr.then((session_hash) => {
 					this.$cookies.set('vue_example_user', session_hash);
 					this.$router.push({name: 'home'});
-					this.$store.dispatch('GET_ALL_POSTS', session_hash)
-					.catch(({type, message}) => {
-						if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
-						console.error(message);
-					})
-				}) 
-				.catch(({type, message}) => {
+					return this.$store.dispatch('ADD_MESSAGE', {text: 'Пользователь успешно зарегистрирован!', type: 'success'})
+				});
+				registr.then(session_hash => this.$store.dispatch('GET_ALL_POSTS', session_hash));
+				registr.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash));
+
+				registr.catch(({type, message}) => {
+					console.log(2);
 					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 					console.error(message);
 				})

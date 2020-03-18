@@ -10,12 +10,13 @@
                 <router-link v-if="ISADMIN" :to="{name: 'posts-editor'}" class="profile-list"></router-link>
                 <div class="profile-img"></div>
                 <div class="profile-username">{{ USERNAME }}</div>
+                <router-link class="profile-like" :to="{name: 'movies-likes'}"></router-link>
             </div>
             <div class="profile-container" v-else>
                 <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>
                 <router-link :to="{name: 'registr'}" class="profile-label">Зарегистрироваться</router-link>
             </div>
-            <div class="profile-label" @click="exitUser" v-if="ISAUTHETICATED">Выйти</div>
+            <div class="profile-label clickable" @click="exitUser" v-if="ISAUTHETICATED">Выйти</div>
         </div>
     </div>
 </template>
@@ -44,9 +45,10 @@ export default {
 			let session_hash = (this.$cookies.get('vue_example_user')) ? this.$cookies.get('vue_example_user') : '';
             this.$store.dispatch('EXIT_USER', session_hash)
             .then(() => {
-				this.$store.commit('SET_ALL_POSTS', []);
+                this.$store.commit('SET_ALL_POSTS', []);
 				this.$cookies.remove('vue_example_user');
-                if (this.$router.currentRoute.name !== 'home') this.$router.push({name: 'home'});
+				if (this.$router.currentRoute.name !== 'home') this.$router.push({name: 'home'});
+				return this.$store.dispatch('GET_MOVIES')
             })
 			.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
@@ -108,6 +110,10 @@ export default {
             &.bigger {
                 font-size: 1.6rem;
             }
+
+            &.clickable {
+                cursor: pointer;
+            }
         }
 
         &-img {
@@ -123,6 +129,13 @@ export default {
             width: 27px;
             height: 27px;
             background: url('../images/icons/list.png') no-repeat center;
+            background-size: contain;
+        }
+
+        &-like {
+            width: 35px;
+            height: 35px;
+            background: url('../images/icons/heart-full.png') no-repeat center;
             background-size: contain;
         }
     }

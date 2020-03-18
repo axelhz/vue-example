@@ -58,12 +58,15 @@ export default {
 			})
 		},
 		savePosts(posts) {
-			this.$store.dispatch('SAVE_POSTS', {posts, session_hash: this.$cookies.get('vue_example_user')})
-			.then(() => {
+			let saver = this.$store.dispatch('SAVE_POSTS', {posts, session_hash: this.$cookies.get('vue_example_user')})
+			saver.then(() => {
 				this.setDeleted(this.ALL_POSTS);
 				return this.$store.dispatch('ADD_MESSAGE', {text: 'Посты сохранены!', type: 'success'})
 			})
-			.catch(({type, message}) => {
+			saver.then(() => {
+				this.$store.dispatch('GET_SHOWN_POSTS')
+			})
+			saver.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
 			}) 

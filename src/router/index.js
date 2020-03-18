@@ -8,7 +8,7 @@ export default new Router({
 		{
 			name: 'home',
 			path: '/',
-			component: () => import('@/views/home.vue')
+			component: () => import('@/views/home.vue'),
 		},
 		{
 			path: '/posts',
@@ -55,6 +55,30 @@ export default new Router({
 					name: 'post-editor',		
 					path: 'editor',
 					component: () => import('@/views/post-editor.vue')
+				}
+			]
+		},
+		{
+			name: 'movies-show',
+			path: '/movies',
+			component: () => import('@/views/movies-show.vue'),
+			props: { type: 'all' }
+		},
+		{
+			name: 'movies-likes',
+			path: '/likes',
+			component: () => import('@/views/movies-show.vue'),
+			props: { type: 'likes' }
+		},
+		{
+			path: '/movies/:id',
+			component: () => import('@/views/movie-home.vue'),
+			children: [
+				{
+					name: 'movie-show',
+					path: '',
+					component: () => import('@/views/movie-show.vue'),
+
 				}
 			]
 		},

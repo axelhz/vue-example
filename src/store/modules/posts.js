@@ -1,4 +1,4 @@
-import posts_functions from '@/common/server/posts_functions.js';
+import posts_API from '@/common/API/posts.js';
 
 export default {
 	state: {
@@ -20,11 +20,29 @@ export default {
 		SET_ALL_POSTS: (state, all_posts) => {
 			state.all_posts = all_posts;
 		},
+		ADD_POST: (state, post) => {
+			state.all_posts.unshift(post);
+			if (post.status === 'shown') {
+				state.shown_posts.unshift(post);
+			}
+		},
+		UPDATE_POST: (state, post) => {
+			state.all_posts = state.all_posts.map(el => {
+				if (post.id !== el.id) return el;
+				return Object.assign(el, post);
+			});
+			if (post.status === 'shown') {
+				state.shown_posts = state.shown_posts.map(el => {
+					if (post.id !== el.id) return el;
+					return Object.assign(el, post);
+				})
+			}
+		}
 	},
 	actions: {
 		GET_ALL_POSTS: (state, session_hash) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.getAllPosts(session_hash)
+				posts_API.getAllPosts(session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) {
@@ -37,12 +55,11 @@ export default {
 				.catch(({message}) => {
 					reject({type: 'system', message})
 				})
-				
 			})
 		},
 		GET_SHOWN_POSTS: state => {
 			return new Promise((resolve, reject) => {
-				posts_functions.getShownPosts()
+				posts_API.getShownPosts()
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
@@ -58,13 +75,13 @@ export default {
 		},
 		CREATE_POST: (state, {post, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.createPost(post, session_hash)
+				posts_API.createPost(post, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
 					else {
-						state.commit('SET_ALL_POSTS', result.data.posts);
-						resolve(result.data.new_id);
+						state.commit('ADD_POST', result.data.post);
+						resolve(result.data.post.id);
 					}
 				})
 				.catch(({message}) => {
@@ -74,12 +91,12 @@ export default {
 		},
 		CHANGE_POST: (state, {post, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.changePost(post, session_hash)
+				posts_API.changePost(post, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
 					else {
-						state.commit('SET_ALL_POSTS', result.data.posts);
+						state.commit('UPDATE_POST', result.data.post);
 						resolve();
 					}
 				})
@@ -90,20 +107,13 @@ export default {
 		},
 		SAVE_POSTS: (state, {posts, session_hash}) => {
 			return new Promise((resolve, reject) => {
-				posts_functions.savePosts(posts, session_hash)
+				posts_API.savePosts(posts, session_hash)
 				.then(response => JSON.parse(response))
 				.then(result => {
 					if (!result.success) reject({type: 'user', message: result.message});
 					else {
 						state.commit('SET_ALL_POSTS', result.data.posts);
-						posts_functions.getShownPosts()
-						state.dispatch('GET_SHOWN_POSTS')
-						.then(() => {
-							resolve();
-						})
-						.catch(({message}) => {
-							reject({type: 'error', message})
-						})
+						resolve();
 					}
 				})
 				.catch(({message}) => {

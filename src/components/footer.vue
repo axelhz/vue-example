@@ -19,18 +19,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.footer-container {
-		width: 100%;
-		max-width: 1920px;
-		background: black;
-		color: #f60;
-		position: absolute;
-		bottom: 0;
-		padding: 1rem 0;
-	}
+	.footer {
+		&-container {
+			width: 100%;
+			max-width: 1920px;
+			background: black;
+			color: #f60;
+			position: absolute;
+			bottom: 0;
+			padding: 1rem 0;
+		}
 
-	.footer-text {
-		padding-left: 20px;
+		&-text {
+			padding-left: 20px;
+		}
 	}
-
 </style>

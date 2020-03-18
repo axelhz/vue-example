@@ -1,12 +1,11 @@
 <template>
-	<div class="pagination-wrapper" :class="extra_class">
+	<div class="pagination-wrapper" :class="extra_class" v-if="pages_length > 1">
 		<div v-for="(page, i) in pages_length" class="pagination-page" 
 			:class="(i+1) === current_page ? 'active' : ''" @click="pageChanged(i+1)" :key="i+1"> 
 			{{ i + 1 }}
 		</div>
 	</div>
 </template>
-
 
 <script>
 
@@ -17,8 +16,13 @@ export default {
 	props: ['elements_length', 'page_size', 'extra_class'],
 	data() {
 		return {
-			current_page: 1,
-			pages_length: Math.floor(this.elements_length/this.page_size) + 1
+			current_page: 1
+		}
+	},
+	computed: {
+		pages_length() {
+			let devision = this.elements_length/this.page_size;
+			return (Math.floor(devision) === devision) ? devision : Math.floor(devision) + 1;
 		}
 	},
 	methods: {
