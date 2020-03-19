@@ -1,19 +1,20 @@
 <template>
-	<div class="messagebox-space" tabindex="0" @keyup.esc="closeMessageBox">
-		<div class="messagebox-shadow" @click="closeMessageBox"></div>
+	<div class="messagebox-space" tabindex="0" @keyup.esc="show_messagebox = false"  @click="show_messagebox = false">
+		<div class="messagebox-shadow"></div>
 		<div class="messagebox-container">
-
-			<div class="messagebox">
-				<div class="messagebox-header">Сообщение</div>
-				<div class="messagebox-close" @click="closeMessageBox">x</div>
-				<div class="messagebox-body">
-					<div class="messagebox-item" v-for="(message, i) in MESSAGES" :key="i">
-						<div class="messagebox-icon" :class="message.type"></div>
-						<div class="messagebox-text" :class="message.type">{{message.text}}</div>
+			<transition name="messagebox" v-on:after-leave="closeMessageBox">
+				<div class="messagebox" v-if="show_messagebox">
+					<div class="messagebox-header">Сообщение</div>
+					<div class="messagebox-close">x</div>
+					<div class="messagebox-body">
+						<div class="messagebox-item" v-for="(message, i) in MESSAGES" :key="i">
+							<div class="messagebox-icon" :class="message.type"></div>
+							<div class="messagebox-text" :class="message.type">{{message.text}}</div>
+						</div>
+						<div class="button-common">OK</div>
 					</div>
-					<div class="button-common" @click="closeMessageBox">OK</div>
 				</div>
-			</div>
+			</transition>
 		</div>
 	</div>
 </template>
@@ -29,10 +30,11 @@ export default {
 	mixins: [],
 	data() {
 		return {
-
+			show_messagebox: false
 		}
 	},
 	mounted() {
+		this.show_messagebox = true;
 		this.$el.focus();
 	},
 	computed: {
@@ -40,7 +42,7 @@ export default {
 	},
 	methods: {
 		closeMessageBox() {
-			this.$store.dispatch('CLEAR_MESSAGES');
+			this.$store.dispatch('CLEAR_MESSAGES')
 		}
 	}
 }
@@ -150,4 +152,35 @@ export default {
 			font-size: 1rem;
 		}
 	}
+
+	.messagebox-enter-active {
+		animation: messagebox-in .1s;
+	}
+
+	.messagebox-leave-active {
+		animation: messagebox-out .2s;
+	}
+
+	@keyframes messagebox-in {
+		0% {
+			margin-left: 100%;
+		}
+
+		100% {
+			margin-left: 0%;
+		}
+	}
+
+	@keyframes messagebox-out {
+		0% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.2);
+		}
+		100% {
+			transform: scale(0);
+		}
+	}
+
 </style>

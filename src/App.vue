@@ -2,7 +2,7 @@
 	<div id="app">
 		<block-header></block-header>
 		<router-view></router-view>
-		<block-footer></block-footer>	
+		<block-footer></block-footer>
 		<message-box v-if="MESSAGES.length"></message-box>
 	</div>
 </template>
@@ -80,4 +80,7 @@ export default {
 		align-items: center;
 		color: #f60;
 	}
+
+
+
 </style>

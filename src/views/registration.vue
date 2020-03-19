@@ -63,9 +63,9 @@ export default {
 					this.$cookies.set('vue_example_user', session_hash);
 					this.$router.push({name: 'home'});
 					return this.$store.dispatch('ADD_MESSAGE', {text: 'Пользователь успешно зарегистрирован!', type: 'success'})
-				});
-				registr.then(session_hash => this.$store.dispatch('GET_ALL_POSTS', session_hash));
-				registr.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash));
+				}).catch(() => {})
+				registr.then(session_hash => this.$store.dispatch('GET_ALL_POSTS', session_hash)).catch(() => {})
+				registr.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash)).catch(() => {})
 
 				registr.catch(({type, message}) => {
 					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});

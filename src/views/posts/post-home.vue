@@ -5,7 +5,9 @@
 			<router-link :to="{name: 'post-show'}" class="link-option">Просмотр</router-link>
 			<router-link :to="{name: 'post-editor'}" class="link-option">Редактирование</router-link>
 		</div>
-		<router-view :post="post"></router-view>
+		<transition name="router-view" mode="out-in">
+			<router-view :post="post"></router-view>
+		</transition>
 	</div>
 </template>
 

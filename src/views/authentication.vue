@@ -54,8 +54,10 @@ export default {
 					this.$cookies.set('vue_example_user', session_hash)
 					this.$router.push({name: 'home'})
 					return this.$store.dispatch('GET_ALL_POSTS', session_hash)
-				})
-				auth.then(session_hash => this.$store.dispatch('GET_MOVIES', session_hash))
+				}).catch(() => {})
+				auth.then(session_hash => {
+					this.$store.dispatch('GET_MOVIES', session_hash)
+				}).catch(() => {})
 
 				auth.catch(({type, message}) => {
 					if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
