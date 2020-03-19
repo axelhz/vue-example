@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper-common">
-		<yandex-map :zoom="device === 'mobile' ? 9 : 10" :coords="center_coords" :scrollZoom="false">
+		<yandex-map :zoom="10" :coords="center_coords" :scrollZoom="false">
 			<ymap-marker v-for="(cinema, i) in cinemas" :marker-id="i+1"
 						:coords="cinema.coords" :balloon-template="balloonTemplate(cinema)"
 						:key="i"></ymap-marker>

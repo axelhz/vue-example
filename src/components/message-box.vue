@@ -36,6 +36,7 @@ export default {
 	mounted() {
 		this.show_messagebox = true;
 		this.$el.focus();
+		window.scrollTo(0, 0);
 	},
 	computed: {
 		...mapGetters(['MESSAGES'])
