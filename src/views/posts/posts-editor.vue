@@ -1,18 +1,24 @@
 <template>
 	<div class="wrapper-common">
 		<table class="table-common">
+			<col class="col-common id">
+			<col class="col-common title">
+			<col class="col-common status">
+			<col class="col-common delete">
 			<tr class="tr-common">
 				<th class="th-common id">ID</th>
 				<th class="th-common title">Title</th>
 				<th class="th-common status">Статус</th>
 				<th class="th-common delete">X</th>
 			</tr>
-			<tr v-for="(post, i) in paged_posts" :key="i" class="tr-common" :class="getTrClass(post)">
-				<td class="td-common id href" align="center"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.id}}</router-link></td>
-				<td class="td-common title href"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.title}}</router-link></td>
-				<td class="td-common status" align="center" @click="changeStatus(post, post.status)">{{post.status_text}}</td>
-				<td class="td-common delete" align="center" @click="post.deleted = !post.deleted">{{post.deleted ? 'Восстановить' : 'Удалить'}}</td>
-			</tr>
+			<transition-group name="trs-appearing" @after-enter="next" tag="tbody">
+				<tr v-for="post in animated_posts" :key="post.id" class="tr-common" :class="getTrClass(post)">
+					<td class="td-common id" align="center"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.id}}</router-link></td>
+					<td class="td-common title"><router-link :to="{name: 'post-show', params: {id: post.id}}" class="td-link">{{post.title}}</router-link></td>
+					<td class="td-common status" align="center" @click="changeStatus(post, post.status)">{{post.status_text}}</td>
+					<td class="td-common delete" align="center" @click="post.deleted = !post.deleted">{{post.deleted ? 'Восстановить' : 'Удалить'}}</td>
+				</tr>
+			</transition-group>
 		</table>
 		<pagination :elements_length="ALL_POSTS.length" :page_size="page_size" @pageChanged="pageChanged"></pagination>
 		<div class="button-common" @click="savePosts(ALL_POSTS)">Сохранить</div>
@@ -31,14 +37,21 @@ export default {
 	data() {
 		return {
 			page_size: 10,
-			current_page: 1
+			current_page: 1,
+			animated_index: -1,
+			animated_posts: []
 		}
 	},
 	computed: {
 		...mapGetters(['ISADMIN', 'ALL_POSTS']),
 		paged_posts() {
 			return this.ALL_POSTS.slice().splice((this.current_page - 1)*this.page_size, this.page_size);
-		}
+		},
+	},
+	watch: {
+		animated_index(value) {
+			this.animated_posts.push(this.paged_posts[value])
+		},
 	},
 	created() {
 		if (!this.ISADMIN) {
@@ -46,6 +59,9 @@ export default {
 		} else {
 			this.setDeleted(this.ALL_POSTS);
 		}
+	},
+	mounted() {
+		this.startAnimation();
 	},
 	methods: {
 		changeStatus(post, status) {
@@ -73,11 +89,19 @@ export default {
 		},
 		pageChanged(i) {
 			this.current_page = i;
+			this.animated_index = 0;
+			this.animated_posts = [];
 		},
 		getTrClass(post) {
 			if (post.deleted) return 'deleted';
 			if (post.status === 'confirmed') return 'confirmed';
 			return 'shown';
+		},
+		startAnimation() {
+			this.animated_index = 0;
+		},
+		next() {
+			this.animated_index = Math.min(this.paged_posts.length - 1, this.animated_index + 1);
 		}
 	}
 }
@@ -86,20 +110,22 @@ export default {
 
 <style scoped lang="scss">
 	.mobile {
-		.td-common, .th-common {
+		.col-common {
+			&.id {
+				width: 22px;
+			}
+
 			&.delete {
-				min-width: 83px;
-				max-width: 83px;
+				width: 83px;
 			}
 
 			&.status {
-				min-width: 96px;
-				max-width: 96px;
+				width: 96px;
 			}
+		}
 
+		.td-common, .th-common {
 			&.id {
-				min-width: 22px;
-				max-width: 22px;
 				padding: 0px 3px;
 			}
 		}
@@ -116,25 +142,18 @@ export default {
 	.confirmed {
 		background: #FBFCA8;
 	}
-	
-	.tr-common:not(.deleted) .href {
-		cursor: pointer;
-	}
 
-	.td-common, .th-common {
+	.col-common {
+		&.id {
+			width: 34px;
+		}
+
 		&.delete {
-			min-width: 122px;
-			max-width: 122px;
+			width: 122px;
 		}
 
 		&.status {
-			min-width: 135px;
-			max-width: 135px;
-		}
-
-		&.id {
-			min-width: 34px;
-			max-width: 34px;
+			width: 135px;
 		}
 	}
 
@@ -142,5 +161,13 @@ export default {
 		&.delete, &.status {
 			cursor: pointer;
 		}
+	}
+
+	.trs-appearing-enter-active {
+		transition: opacity 0ms;
+	}
+
+	.trs-appearing-enter {
+		opacity: 0;
 	}
 </style>

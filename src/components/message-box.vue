@@ -34,9 +34,11 @@ export default {
 		}
 	},
 	mounted() {
+		let scroll = window.pageYOffset || document.documentElement.scrollTop;
+
 		this.show_messagebox = true;
 		this.$el.focus();
-		window.scrollTo(0, 0);
+		window.scrollTo(0, scroll);
 	},
 	computed: {
 		...mapGetters(['MESSAGES'])
