@@ -10,6 +10,14 @@ export default {
         },
         LIKED_MOVIES: (state, getters) => {
             return getters.MOVIES.filter(el => el.liked);
+        },
+        YEARS: (state, getters) => {
+            console.log(1);
+            let years = [];
+            getters.MOVIES.forEach(movie => {
+                if (!years.includes(+movie.year)) years.push(+movie.year);
+            });
+            return years.sort();
         }
     },
     mutations: {
