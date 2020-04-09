@@ -54,7 +54,6 @@
                 return (this.type === 'all') ? this.MOVIES : this.LIKED_MOVIES;
             },
             filtered_movies() {
-                console.log(2);
                 let movies = this.movies;
                 if (this.filtered_name) {
                     movies = movies.filter(el => el.name.toLowerCase().includes(this.filtered_name.toLowerCase()))

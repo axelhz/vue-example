@@ -1,6 +1,5 @@
 export default {
     bind: function(el, binding, vNode) {
-        console.log(binding);
         // Provided expression must evaluate to a function.
         if (typeof binding.value !== 'function') {
             const compName = vNode.context.name
