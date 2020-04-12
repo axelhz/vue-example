@@ -4,95 +4,110 @@ import {getData, setData} from './common.js';
 let default_users = [{id: 1, name: 'admin', password: MD5('1234'), isAdmin: true}];
 
 export default {
-	getUserThroughHash: session_hash => {
-		return new Promise((resolve, reject) => {
-			getData('loggings', [])
-			.then(loggings => {
-				let finding = loggings.find(el => el.session_hash === session_hash);
-				
-				if (!finding) throw new Error('Сессия не найдена');
-				else resolve(JSON.stringify({success: true, data:{user: {name: finding.name, isAdmin: finding.isAdmin}}}));
-			})
-			.catch(error => reject(error))
-		})
+	getUserThroughHash: async (session_hash) => {
+		try {
+			let loggings = await getData('loggings', []),
+				finding = loggings.find(el => el.session_hash === session_hash);
+
+			if (!finding) throw new Error('Сессия не найдена');
+			else return JSON.stringify({success: true, data:{user: {name: finding.name, isAdmin: finding.isAdmin}}});
+		} catch(err) {
+			throw new Error(err);
+		}
 	},
-	authenticateUser: ({username, password}) => {
-		return new Promise((resolve, reject) => {
-			getData('users', default_users)
-			.then(users => {
-				let finding = users.find(el => JSON.stringify({username: el.name, password: el.password}) ===
-											JSON.stringify({username, password}));
-											
-				if (!finding) resolve(JSON.stringify({success: false, message: 'Неверное имя пользователя/пароль!'}));
-				else {
-					getData('loggings', [])
-					.then(loggings => {
-						let session_hash = MD5(new Date().toString() + Math.random());
-						
-						loggings.push({id: finding.id, name: username, isAdmin: finding.isAdmin, session_hash});
-						return setData('loggings', loggings)
-					})
-					.then(loggings => {
-						let {name, isAdmin, session_hash} = loggings[loggings.length - 1];
+	authenticateUser: async ({username, password}) => {
+		try {
+			let users = await getData('users', default_users),
+				finding = users.find(el => JSON.stringify({username: el.name, password: el.password}) ===
+					JSON.stringify({username, password}));
 
-						resolve(JSON.stringify({success: true, data:{user: {name, isAdmin}, session_hash}}));
-					})
-					.catch(error => reject(error))
-				}
-			})
-			.catch(error => reject(error))
-		})
+			if (!finding) return JSON.stringify({success: false, message: 'Неверное имя пользователя/пароль!'});
+			else {
+				let loggings = await getData('loggings', []),
+					session_hash = MD5(new Date().toString() + Math.random());
+
+				loggings.push({id: finding.id, name: username, isAdmin: finding.isAdmin, session_hash});
+				await setData('loggings', loggings);
+
+				return JSON.stringify({success: true, data:{user: {name: username, isAdmin: finding.isAdmin}, session_hash}});
+			}
+		} catch(err) {
+			throw new Error(err);
+		}
 	},
-	registrateUser: ({username, password}) => {
-		return new Promise((resolve, reject) => {
-			getData('users', default_users)
-			.then(users => {
-				let finding = users.find(el => el.name === username);
+	registrateUser: async ({username, password}) => {
+		try {
+			let users = await getData('users', default_users),
+				finding = users.find(el => el.name === username);
 
-				if (finding) resolve(JSON.stringify({success: false, message: 'Пользователь с таким именем уже существует!'}));
-				else {
-					let last_id = users[users.length - 1].id + 1;
+			if (finding) return JSON.stringify({success: false, message: 'Пользователь с таким именем уже существует!'});
+			else {
+				let last_id = users[users.length - 1].id + 1,
+					user = {id: last_id, name: username, password, isAdmin: false};
 
-					users.push({id: last_id, name: username, password, isAdmin: false});
-					return setData('users', users)
-				}
-			})
-			.then(users => {
-				let {id, name, isAdmin} = users[users.length - 1];
+				users.push(user);
+				await setData('users', users);
 
-				getData('loggings', [])
-				.then(loggings => {
-					let session_hash = MD5(new Date().toString() + Math.random());
+				let loggings = await getData('loggings', []),
+					session_hash = MD5(new Date().toString() + Math.random());
 
-					loggings.push({user_id: id, name:name, isAdmin: isAdmin, session_hash});
-					return setData('loggings', loggings)
-				})
-				.then(loggings => {
-					let {name, isAdmin, session_hash} = loggings[loggings.length - 1];
+				loggings.push({user_id: user.id, name:user.name, isAdmin: user.isAdmin, session_hash});
+				await setData('loggings', loggings);
 
-					resolve(JSON.stringify({success: true, data:{user: {name: name, isAdmin:isAdmin}, session_hash}}));
-				})
-				.catch(error => reject(error))
-			})
-			.catch(error => reject(error))
-		})
+				return JSON.stringify({success: true, data:{user: {name: user.name, isAdmin:user.isAdmin}, session_hash}});
+			}
+		} catch(err) {
+			throw new Error(err);
+		}
 	},
-	exitUser: session_hash => {
-		return new Promise((resolve, reject) => {
-			getData('loggings', [])
-			.then(loggings => {
-				let findingIndex = loggings.findIndex(el => el.session_hash === session_hash);
-						
-				if (findingIndex === -1) throw new Error('Сессия не найдена');
-				else {
-					loggings.splice(findingIndex, 1);
-					return setData('loggings', loggings);
-				}
-			})
-			.then(() => {
-				resolve(JSON.stringify({success: true}));
-			})
-			.catch(error => reject(error))
-		})
+	// registrateUser: ({username, password}) => {
+	// 	return new Promise((resolve, reject) => {
+	// 		getData('users', default_users)
+	// 		.then(users => {
+	// 			let finding = users.find(el => el.name === username);
+	//
+	// 			if (finding) resolve(JSON.stringify({success: false, message: 'Пользователь с таким именем уже существует!'}));
+	// 			else {
+	// 				let last_id = users[users.length - 1].id + 1;
+	//
+	// 				users.push({id: last_id, name: username, password, isAdmin: false});
+	// 				return setData('users', users)
+	// 			}
+	// 		})
+	// 		.then(users => {
+	// 			let {id, name, isAdmin} = users[users.length - 1];
+	//
+	// 			getData('loggings', [])
+	// 			.then(loggings => {
+	// 				let session_hash = MD5(new Date().toString() + Math.random());
+	//
+	// 				loggings.push({user_id: id, name:name, isAdmin: isAdmin, session_hash});
+	// 				return setData('loggings', loggings)
+	// 			})
+	// 			.then(loggings => {
+	// 				let {name, isAdmin, session_hash} = loggings[loggings.length - 1];
+	//
+	// 				resolve(JSON.stringify({success: true, data:{user: {name: name, isAdmin:isAdmin}, session_hash}}));
+	// 			})
+	// 			.catch(error => reject(error))
+	// 		})
+	// 		.catch(error => reject(error))
+	// 	})
+	// },
+	exitUser: async (session_hash) => {
+		try {
+			let loggings = await getData('loggings', []),
+				findingIndex = loggings.findIndex(el => el.session_hash === session_hash);
+
+			if (findingIndex === -1) throw new Error('Сессия не найдена');
+			else {
+				loggings.splice(findingIndex, 1);
+				await setData('loggings', loggings);
+
+				return JSON.stringify({success: true});
+			}
+		} catch(err) {
+			throw new Error(err);
+		}
 	}
 }

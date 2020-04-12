@@ -40,17 +40,18 @@ export default {
 		let session_hash = this.$cookies.get('vue_example_user');
 		if (session_hash) {
 			let session_hash = this.$cookies.get('vue_example_user'),
-				getter = this.$store.dispatch('GET_USER_THROUGH_HASH', session_hash)
-			getter.then(() => {
-				this.$store.dispatch('GET_ALL_POSTS', session_hash)
-			});
-			getter.then(() => {
-				this.$store.dispatch('GET_MOVIES', session_hash)
-			});
-			getter.catch(({type, message}) => {
+				promise = this.$store.dispatch('GET_USER_THROUGH_HASH', session_hash)
+
+			promise.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});
 				console.error(message);
-			})
+			});
+			promise.then(() => {
+				this.$store.dispatch('GET_MOVIES', session_hash)
+			}).catch(() => {});
+			promise.then(() => {
+				this.$store.dispatch('GET_ALL_POSTS', session_hash)
+			}).catch(() => {});
 		} else {
 			this.$store.dispatch('GET_MOVIES')
 			.catch(({type, message}) => {
