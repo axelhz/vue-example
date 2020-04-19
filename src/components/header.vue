@@ -42,7 +42,7 @@ export default {
     },
     methods: { 
         exitUser() {
-			let session_hash = (this.$cookies.get('vue_example_user')) ? this.$cookies.get('vue_example_user') : '';
+            const session_hash = (this.$cookies.get('vue_example_user')) ? this.$cookies.get('vue_example_user') : '';
             this.$store.dispatch('EXIT_USER', session_hash)
             .then(() => {
                 this.$store.commit('SET_ALL_POSTS', []);

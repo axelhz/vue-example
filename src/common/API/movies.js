@@ -7,12 +7,12 @@ export default {
             let movies = await getData('movies', default_movies);
             if (!session_hash) return JSON.stringify({success: true, data: {movies}});
             else {
-                let loggings = await getData('loggings', []),
+                const loggings = await getData('loggings', []),
                     finding = loggings.find(el => el.session_hash === session_hash);
 
                 if (!finding) throw new Error('Сессия не найдена!');
                 else {
-                    let likes = await getData('movie_likes', []),
+                    const likes = await getData('movie_likes', []),
                         finding_likes = likes.find(el => el.user_id === finding.id),
                         liked_movies = movies.map(el => {
                             if (!finding_likes) {
@@ -36,7 +36,7 @@ export default {
     changeLike: async (session_hash, movie_id, value) => {
         try {
             if (!session_hash) return JSON.stringify({success: false, message: 'Пользователь не авторизован!'});
-            let loggings = await getData('loggings', []),
+            const loggings = await getData('loggings', []),
                 finding = loggings.find(el => el.session_hash === session_hash);
 
             if (!finding) throw new Error('Сессия не найдена!');

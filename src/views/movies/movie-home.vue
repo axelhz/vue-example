@@ -38,18 +38,6 @@
                     return;
                 } else if (id === 0) {
                     this.$router.replace({name: 'movie-show', params: {id: this.MOVIES[0].id}});
-                    // if (!this.ISADMIN) this.$router.replace({name: 'movie-show', params: {id: this.MOVIES[0].id}});
-                    // else {
-                    //     this.movie = {
-                    //         name: '',
-                    //         id: 0,
-                    //         year: '',
-                    //         director: '',
-                    //         roles: '',
-                    //         description: '',
-                    //         img: ''
-                    //     }
-                    // }
                 } else {
                     this.movie = null;
                     this.MOVIES.forEach(el => {

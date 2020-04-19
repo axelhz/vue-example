@@ -37,10 +37,9 @@ export default {
 		}
 	},
 	mounted() {
-		let session_hash = this.$cookies.get('vue_example_user');
+		const session_hash = this.$cookies.get('vue_example_user');
 		if (session_hash) {
-			let session_hash = this.$cookies.get('vue_example_user'),
-				promise = this.$store.dispatch('GET_USER_THROUGH_HASH', session_hash)
+			let promise = this.$store.dispatch('GET_USER_THROUGH_HASH', session_hash)
 
 			promise.catch(({type, message}) => {
 				if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});

@@ -92,7 +92,7 @@ export default {
 		submitForm() {
 			this.errors = [];
 			if (this.validateData()) {
-				let {id, title, description, img} = this.post,				
+				const {id, title, description, img} = this.post,
 					action = id === 0 ? this.$store.dispatch('CREATE_POST', {post: {title, description, img}, session_hash: this.$cookies.get('vue_example_user')}) :
 										this.$store.dispatch('CHANGE_POST', {post: {id, title, description, img}, session_hash: this.$cookies.get('vue_example_user')});
 				

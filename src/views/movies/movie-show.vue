@@ -37,7 +37,7 @@
         },
         methods: {
             changeLike(movie) {
-                let session_hash = this.$cookies.get('vue_example_user');
+                const session_hash = this.$cookies.get('vue_example_user');
                 this.$store.dispatch('CHANGE_LIKE', {session_hash, movie})
                     .catch(({type, message}) => {
                         if (type === 'user') return this.$store.dispatch('ADD_MESSAGE', {text: message, type: 'error'});

@@ -5,13 +5,13 @@ export default {
 	getAllPosts: async (session_hash) => {
 		try {
 			if (!session_hash) return JSON.stringify({success: false, message: 'Пользователь не авторизован!'});
-			let loggings = await getData('loggings', []),
+			const loggings = await getData('loggings', []),
 				finding = loggings.find(el => el.session_hash === session_hash);
 
 			if (!finding) throw new Error('Сессия не найдена');
 			else if (!finding.isAdmin) return JSON.stringify({success: true, data:{posts:[]}})
 			else {
-				let posts = await getData('posts', default_posts);
+				const posts = await getData('posts', default_posts);
 
 				return JSON.stringify({success: true, data:{posts: posts}})
 			}
@@ -32,7 +32,7 @@ export default {
 		try {
 			if (!session_hash) return JSON.stringify({success: false, message: 'Пользователь не авторизован!'});
 
-			let loggings = getData('loggings', []),
+			const loggings = getData('loggings', []),
 				finding = loggings.find(el => el.session_hash === session_hash);
 
 			if (!finding) throw new Error('Сессия не найдена');
@@ -41,10 +41,10 @@ export default {
 				message: 'У вас нет прав на создание постов!'
 			})
 			else {
-				let posts = getData('posts', default_posts),
-					finding2 = posts.find(el => el.title === post.title);
+				let posts = getData('posts', default_posts);
+				const finding_same = posts.find(el => el.title === post.title);
 
-				if (finding2) {
+				if (finding_same) {
 					return JSON.stringify({success: false, message: 'Такой заголовок уже существует!'});
 				} else {
 					let new_id = posts[0].id + 1;
@@ -65,14 +65,14 @@ export default {
 		try {
 			if (!session_hash) return JSON.stringify({success: false, message: 'Пользователь не авторизован!'});
 
-			let loggings = await getData('loggings', []),
+			const loggings = await getData('loggings', []),
 				finding = loggings.find(el => el.session_hash === session_hash);
 
 			if (!finding) throw new Error('Сессия не найдена');
 			else if (!finding.isAdmin) return JSON.stringify({success: false, message: 'У вас нет прав на изменение постов!'})
 			else {
-				let posts = await getData('posts', default_posts),
-					finding_index = posts.findIndex(el => el.id === post.id);
+				let posts = await getData('posts', default_posts);
+				const finding_index = posts.findIndex(el => el.id === post.id);
 
 				if (finding_index === -1) return JSON.stringify({success: false, message: 'Пост не найден'});
 				else {
@@ -91,7 +91,7 @@ export default {
 		try {
 			if (!session_hash) return JSON.stringify({success: false, message: 'Пользователь не авторизован!'});
 
-			let loggings = getData('loggings', []),
+			const loggings = await getData('loggings', []),
 				finding = loggings.find(el => el.session_hash === session_hash);
 
 			if (!finding) throw new Error('Сессия не найдена');

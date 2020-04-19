@@ -21,7 +21,7 @@ export default {
 	},
 	computed: {
 		pages_length() {
-			let devision = this.elements_length/this.page_size;
+			const devision = this.elements_length/this.page_size;
 			return (Math.floor(devision) === devision) ? devision : Math.floor(devision) + 1;
 		}
 	},

@@ -34,7 +34,7 @@ export default {
 		}
 	},
 	mounted() {
-		let scroll = window.pageYOffset || document.documentElement.scrollTop;
+		const scroll = window.pageYOffset || document.documentElement.scrollTop;
 
 		this.show_messagebox = true;
 		this.$el.focus();
