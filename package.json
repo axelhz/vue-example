@@ -9,24 +9,24 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "core-js": "^3.6.4",
-    "swiper": "^5.3.1",
+    "core-js": "^3.6.5",
+    "swiper": "^5.3.8",
     "vue": "^2.6.11",
-    "vue-cookies": "^1.6.1",
+    "vue-cookies": "^1.7.0",
     "vue-device-detector": "weilbith/vue-device-detector",
     "vue-localstorage": "^0.6.2",
-    "vue-router": "^3.1.5",
-    "vue-yandex-maps": "^0.10.6",
-    "vuex": "^3.1.2"
+    "vue-router": "^3.1.6",
+    "vue-yandex-maps": "^0.10.7",
+    "vuex": "^3.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.2.0",
     "@vue/cli-plugin-eslint": "~4.2.0",
     "@vue/cli-service": "~4.2.0",
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.1.2",
-    "node-sass": "^4.13.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.14.0",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   },
