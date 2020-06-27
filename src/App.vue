@@ -1,9 +1,10 @@
 <template>
 	<div id="app">
-		<block-header></block-header>
+		<block-header @showQuasarGrid="show_quasar_grid = true"></block-header>
 		<router-view></router-view>
 		<block-footer></block-footer>
 		<message-box v-if="MESSAGES.length"></message-box>
+		<quasar-grid v-if="show_quasar_grid" @closeQuasarGrid="show_quasar_grid = false"></quasar-grid>
 	</div>
 </template>
 
@@ -14,16 +15,18 @@ import BlockFooter from './components/footer.vue';
 import MessageBox from './components/message-box.vue';
 import {mapGetters} from 'vuex';
 import device_detection from "./common/device_detection";
+import QuasarGrid from './components/quasar-grid';
 
 export default {
 	name: 'App',
 	mixins: [device_detection],
 	components: {
-		BlockHeader, BlockFooter, MessageBox  
+		BlockHeader, BlockFooter, MessageBox,
+		QuasarGrid
 	},
 	data() {
 		return {
-			
+			show_quasar_grid: false
 		}
 	},
 	watch: {

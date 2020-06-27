@@ -15,6 +15,7 @@
             <div class="profile-container" v-else>
                 <router-link :to="{name: 'auth'}" class="profile-label">Войти</router-link>
                 <router-link :to="{name: 'registr'}" class="profile-label">Зарегистрироваться</router-link>
+                <div style="margin-left: 5px; cursor: pointer" @click="$emit('showQuasarGrid')">+</div>
             </div>
             <div class="profile-label clickable" @click="exitUser" v-if="ISAUTHENTICATED">Выйти</div>
         </div>

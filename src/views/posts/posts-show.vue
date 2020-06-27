@@ -39,6 +39,12 @@ export default {
 		this.initSwiper();
 	},
 	watch: {
+		SHOWN_POSTS() {
+			if (!this.swiper) return;
+			this.swiper.destroy();
+			this.swiper = null;
+			this.$nextTick(this.initSwiper);
+		},
 		device(val) {
 			if (!this.swiper) return;
 			if (val === 'mobile') return;

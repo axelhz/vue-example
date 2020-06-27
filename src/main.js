@@ -7,6 +7,7 @@ import VueLocalStorage from 'vue-localstorage';
 import router from '@/router';
 import YmapPlugin from 'vue-yandex-maps';
 import VueDeviceDetector from 'vue-device-detector'
+import Quasar from 'quasar'
 
 Vue.config.productionTip = false;
 
@@ -23,6 +24,8 @@ const settings = {
 }
 
 Vue.use(YmapPlugin, settings);
+
+Vue.use(Quasar)
 
 new Vue({
   el: '#app',
