@@ -13,8 +13,8 @@
                         </div>
                         <div class="q-select-wrapper">
                             <label class="q-select-label">Имя:</label>
-                            <q-select outlined v-model="filters.name" :options="selects.names" dense
-                                @change="changeNameFilter">
+                            <q-select outlined :options="selects.names" dense :value="filters.name"
+                                @input="changeNameFilter">
                                 <template v-slot:prepend>
 
                                 </template>
@@ -79,10 +79,10 @@
     export default {
         name: "quasar-grid",
         components: {},
+        props: ['form_data'],
         data() {
             return {
                 mode: 'simple',
-                data: null,
                 pagination: {
                     page: 1,
                 },
@@ -115,6 +115,10 @@
             }
         },
         computed: {
+            data() {
+                if (!this.form_data) return null;
+                return Array.isArray(this.form_data) ? [...this.form_data] : {...this.form_data}
+            },
             filtered_data() {
                 if (!this.data) return null;
                 return this.data.filter((elem) =>
@@ -122,7 +126,7 @@
                     (this.filters.speciality === 'Все' || elem.speciality === this.filters.speciality) &&
                     (this.filters.country === 'Все' || elem.country === this.filters.country) &&
                     (this.filters.hobby === 'Все' || elem.hobby === this.filters.hobby))
-            }
+            },
         },
         mounted() {
             // axios
@@ -160,6 +164,8 @@
         methods: {
             changeNameFilter(value) {
                 this.filters.name = value;
+               // this.$parent.internal_filters.push({field: 'name', operator: '=', value})
+                this.$parent.$emit('addFilters', [{field: 'name', operator: '=', value}])
             },
             changeCountryFilter(value) {
                 this.filters.country = value;

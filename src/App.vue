@@ -4,7 +4,12 @@
 		<router-view></router-view>
 		<block-footer></block-footer>
 		<message-box v-if="MESSAGES.length"></message-box>
-		<quasar-grid v-if="show_quasar_grid" @closeQuasarGrid="show_quasar_grid = false"></quasar-grid>
+		<common-form v-if="show_quasar_grid"  @closeQuasarGrid="show_quasar_grid = false" :external_sorters="sorters"
+		:external_filters="filters" :url_for_load="'/vagonList'" :external_pagination="pagination">
+			<template slot-scope="{form_data}">
+				<quasar-grid :form_data="form_data"></quasar-grid>
+			</template>
+		</common-form>
 	</div>
 </template>
 
@@ -16,17 +21,45 @@ import MessageBox from './components/message-box.vue';
 import {mapGetters} from 'vuex';
 import device_detection from "./common/device_detection";
 import QuasarGrid from './components/quasar-grid';
+import CommonForm from './components/common-form.vue';
 
 export default {
 	name: 'App',
 	mixins: [device_detection],
 	components: {
 		BlockHeader, BlockFooter, MessageBox,
-		QuasarGrid
+		QuasarGrid, CommonForm
 	},
 	data() {
 		return {
-			show_quasar_grid: false
+			show_quasar_grid: false,
+			filters: [
+				{
+					field: 'a',
+					operator: '=',
+					value: 1
+				},
+				{
+					field: 'b',
+					operator: '<=',
+					value: 2
+				}
+			],
+			sorters: [
+				{
+					field: 'a',
+					order: '+'
+				},
+				{
+					field: 'b',
+					order: '-'
+				}
+			],
+			pagination: {
+				limit: 50,
+				offset: 1,
+				page: 1
+			}
 		}
 	},
 	watch: {
