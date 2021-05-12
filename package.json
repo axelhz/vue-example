@@ -12,7 +12,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "quasar": "^1.12.8",
-    "swiper": "^5.3.8",
+    "swiper": "^6.5.1",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.0",
     "vue-device-detector": "weilbith/vue-device-detector",
